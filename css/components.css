@@ -1,0 +1,101 @@
+.comparison-section {
+  padding: 60px 0;
+}
+
+.comparison-section h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 32px;
+  color: #1e2a38;
+}
+
+/* Селекты */
+.countries {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.country-select {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.country-select label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.country-select select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+  transition: border 0.2s ease-in-out;
+}
+
+.country-select select:focus {
+  border-color: #1e88e5;
+  outline: none;
+}
+
+/* Таблица */
+.comparison-table {
+  width: 65%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+.comparison-table th,
+.comparison-table td {
+  width: 33.33%;
+  max-width: 33.33%;
+  padding: 18px 16px;
+  text-align: center;
+  font-size: 15px;
+  border-bottom: 1px solid #e6eaf0;
+}
+
+.comparison-table tr:nth-child(even) {
+  background-color: #f9fbfc;
+}
+
+.comparison-table th {
+  background-color: #edf2f7;
+  color: #1e2a38;
+  font-size: 16px;
+}
+
+.comparison-table td:first-child {
+  font-weight: bold;
+  text-align: left;
+  background-color: #f7f9fa;
+}
+
+/* Флаги */
+.flag-select {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.flag-select img {
+  width: 36px;
+  height: 24px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+}

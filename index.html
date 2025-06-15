@@ -1,0 +1,130 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Сравнение условий жизни в разных странах для миграции" />
+  <title>MigrationCompare — Сравнение стран</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+  <!-- Шапка сайта -->
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="logo">MigrationCompare</div>
+      <nav class="nav">
+        <a href="#">Главная</a>
+        <a href="#">Страны</a>
+        <a href="#">О нас</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Секция сравнения -->
+  <main class="comparison-section">
+    <div class="container">
+      <h1>Сравнение стран</h1>
+
+      <!-- Блок выбора стран -->
+      <div class="countries">
+        <div class="country-select">
+          <label for="country1">Страна 1:</label>
+          <select id="country1" name="country1">
+            <option value="">Выберите страну</option>
+            <option value="armenia">Армения</option>
+            <option value="serbia">Сербия</option>
+            <option value="philippines">Филиппины</option>
+            <option value="vietnam">Вьетнам</option>
+            <option value="albania">Албания</option>
+            <option value="georgia">Грузия</option>
+            <option value="mexico">Мексика</option>
+            <option value="portugal">Португалия</option>
+            <option value="thailand">Таиланд</option>
+            <option value="turkiye">Турция</option>
+          </select>
+        </div>
+
+        <div class="country-select">
+          <label for="country2">Страна 2:</label>
+          <select id="country2" name="country2">
+            <option value="">Выберите страну</option>
+            <option value="armenia">Армения</option>
+            <option value="serbia">Сербия</option>
+            <option value="philippines">Филиппины</option>
+            <option value="vietnam">Вьетнам</option>
+            <option value="albania">Албания</option>
+            <option value="georgia">Грузия</option>
+            <option value="mexico">Мексика</option>
+            <option value="portugal">Португалия</option>
+            <option value="thailand">Таиланд</option>
+            <option value="turkiye">Турция</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Таблица сравнения -->
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Критерий</th>
+            <th id="country1-header">Страна 1</th>
+            <th id="country2-header">Страна 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Стоимость жизни</td>
+            <td id="cost-country1"></td>
+            <td id="cost-country2"></td>
+          </tr>
+          <tr>
+            <td>Климат</td>
+            <td id="climate-country1"></td>
+            <td id="climate-country2"></td>
+          </tr>
+          <tr>
+            <td>Безопасность</td>
+            <td id="safety-country1"></td>
+            <td id="safety-country2"></td>
+          </tr>
+          <tr>
+            <td>Медицина</td>
+            <td id="healthcare-country1"></td>
+            <td id="healthcare-country2"></td>
+          </tr>
+          <tr>
+            <td>Интернет и связь</td>
+            <td id="internet-country1"></td>
+            <td id="internet-country2"></td>
+          </tr>
+          <tr>
+            <td>Digital Nomad виза</td>
+            <td id="nomadVisa-country1"></td>
+            <td id="nomadVisa-country2"></td>
+          </tr>
+          <tr>
+            <td>Банковская система</td>
+            <td id="banking-country1"></td>
+            <td id="banking-country2"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Подвал -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 MigrationCompare. Все права защищены.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js" type="module"></script>
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>

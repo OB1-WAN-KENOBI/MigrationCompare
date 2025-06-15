@@ -1,0 +1,32 @@
+@media (max-width: 768px) {
+  .countries {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .comparison-table {
+    font-size: 14px;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 12px 10px;
+  }
+
+  .country-select {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 600px) {
+  .comparison-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .comparison-table table {
+    width: 600px;
+  }
+}
