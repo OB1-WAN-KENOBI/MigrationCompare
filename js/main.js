@@ -9,12 +9,11 @@ const header2 = document.getElementById("country2-header");
 
 let numbeoData = {};
 
-// Загрузка данных из numbeo-data.json
 fetch("./numbeo-data.json")
   .then((res) => res.json())
   .then((data) => {
     numbeoData = data;
-    update(); // обновим таблицу после загрузки
+    update();
   });
 
 function normalize(str) {
@@ -53,7 +52,6 @@ function clearTable() {
   });
 }
 
-// 🔒 Блокировка одинаковых стран
 function syncSelectOptions() {
   const selected1 = select1.value;
   const selected2 = select2.value;
@@ -65,6 +63,20 @@ function syncSelectOptions() {
   [...select2.options].forEach((opt) => {
     opt.disabled = opt.value && opt.value === selected1;
   });
+}
+
+function highlightBetter(field, v1, v2, lowerIsBetter = true) {
+  const c1 = document.getElementById(`${field}-country1`);
+  const c2 = document.getElementById(`${field}-country2`);
+  c1.classList.remove("highlight-better");
+  c2.classList.remove("highlight-better");
+
+  const n1 = parseFloat(v1);
+  const n2 = parseFloat(v2);
+  if (isNaN(n1) || isNaN(n2)) return;
+
+  const better = lowerIsBetter ? (n1 < n2 ? c1 : c2) : n1 > n2 ? c1 : c2;
+  better.classList.add("highlight-better");
 }
 
 function update() {
@@ -90,40 +102,55 @@ function update() {
     const d1 = numbeoData[key1] || {};
     const d2 = numbeoData[key2] || {};
 
-    document.getElementById("cost-country1").textContent = d1.cost_of_living_usd
-      ? `$${d1.cost_of_living_usd}`
+    const cost1 = d1.cost_of_living_usd || 0;
+    const cost2 = d2.cost_of_living_usd || 0;
+    document.getElementById("cost-country1").textContent = cost1
+      ? `$${cost1}`
       : "—";
-    document.getElementById("cost-country2").textContent = d2.cost_of_living_usd
-      ? `$${d2.cost_of_living_usd}`
+    document.getElementById("cost-country2").textContent = cost2
+      ? `$${cost2}`
       : "—";
+    highlightBetter("cost", cost1, cost2, true);
 
-    document.getElementById("rent-country1").textContent = d1.rent_usd
-      ? `$${d1.rent_usd}`
+    const rent1 = d1.rent_usd || 0;
+    const rent2 = d2.rent_usd || 0;
+    document.getElementById("rent-country1").textContent = rent1
+      ? `$${rent1}`
       : "—";
-    document.getElementById("rent-country2").textContent = d2.rent_usd
-      ? `$${d2.rent_usd}`
+    document.getElementById("rent-country2").textContent = rent2
+      ? `$${rent2}`
       : "—";
+    highlightBetter("rent", rent1, rent2, true);
 
-    document.getElementById("groceries-country1").textContent = d1.groceries_usd
-      ? `$${d1.groceries_usd}`
+    const food1 = d1.groceries_usd || 0;
+    const food2 = d2.groceries_usd || 0;
+    document.getElementById("groceries-country1").textContent = food1
+      ? `$${food1}`
       : "—";
-    document.getElementById("groceries-country2").textContent = d2.groceries_usd
-      ? `$${d2.groceries_usd}`
+    document.getElementById("groceries-country2").textContent = food2
+      ? `$${food2}`
       : "—";
+    highlightBetter("groceries", food1, food2, true);
 
-    document.getElementById("transport-country1").textContent = d1.transport_usd
-      ? `$${d1.transport_usd}`
+    const transport1 = d1.transport_usd || 0;
+    const transport2 = d2.transport_usd || 0;
+    document.getElementById("transport-country1").textContent = transport1
+      ? `$${transport1}`
       : "—";
-    document.getElementById("transport-country2").textContent = d2.transport_usd
-      ? `$${d2.transport_usd}`
+    document.getElementById("transport-country2").textContent = transport2
+      ? `$${transport2}`
       : "—";
+    highlightBetter("transport", transport1, transport2, true);
 
-    document.getElementById("salary-country1").textContent = d1.salary_usd
-      ? `$${d1.salary_usd}`
+    const salary1 = d1.salary_usd || 0;
+    const salary2 = d2.salary_usd || 0;
+    document.getElementById("salary-country1").textContent = salary1
+      ? `$${salary1}`
       : "—";
-    document.getElementById("salary-country2").textContent = d2.salary_usd
-      ? `$${d2.salary_usd}`
+    document.getElementById("salary-country2").textContent = salary2
+      ? `$${salary2}`
       : "—";
+    highlightBetter("salary", salary1, salary2, false);
 
     updateTable(countryData, key1, "country1");
     updateTable(countryData, key2, "country2");

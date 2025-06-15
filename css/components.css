@@ -7,6 +7,9 @@
   margin-bottom: 40px;
   font-size: 32px;
   color: #1e2a38;
+  font-weight: 700; /* Более жирный для заголовков */
+  font-size: 36px; /* Чуть крупнее */
+  letter-spacing: -0.02em; /* Улучшает читаемость */
 }
 
 /* Селекты */
@@ -43,7 +46,7 @@
 
 .country-select select:focus {
   border-color: #1e88e5;
-  outline: none;
+  box-shadow: 0 0 8px rgba(30, 136, 229, 0.3); /* Тень для акцента */
 }
 
 /* Таблица */
@@ -67,6 +70,10 @@
   text-align: center;
   font-size: 15px;
   border-bottom: 1px solid #e6eaf0;
+}
+
+.comparison-table td {
+  font-weight: 400; /* Лёгкий вес для текста */
 }
 
 .comparison-table tr:nth-child(even) {
@@ -134,4 +141,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.highlight-better {
+  background-color: #e3fbe3;
+  font-weight: bold;
 }

@@ -35,12 +35,15 @@
 }
 
 .nav a:hover {
-  color: #f9c94e;
+  color: #f7d774;
+  background: linear-gradient(90deg, #f7d774, #f9c94e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .site-footer {
   background: #1e2a38;
-  color: #ccc;
+  color: #e0e0e0;
   text-align: center;
   padding: 20px 0;
   margin-top: 60px;
