@@ -130,7 +130,7 @@ function highlightBetter(field, v1, v2, lowerIsBetter = true) {
   better.classList.add("highlight-better");
 }
 
-async function update() {
+function update() {
   const key1 = normalize(select1.value);
   const key2 = normalize(select2.value);
 
@@ -149,53 +149,74 @@ async function update() {
 
   showSpinner();
 
-  // Загружаем данные из Teleport API для обеих стран
-  const [data1, data2] = await Promise.all([
-    fetchTeleportData(key1),
-    fetchTeleportData(key2),
-  ]);
+  setTimeout(() => {
+    const d1 = numbeoData[key1] || {};
+    const d2 = numbeoData[key2] || {};
 
-  // Подставляем данные в таблицу
-  document.getElementById("cost-country1").textContent = parseTeleportData(
-    data1,
-    "cost_of_living"
-  );
-  document.getElementById("cost-country2").textContent = parseTeleportData(
-    data2,
-    "cost_of_living"
-  );
-  document.getElementById("rent-country1").textContent = parseTeleportData(
-    data1,
-    "rent"
-  );
-  document.getElementById("rent-country2").textContent = parseTeleportData(
-    data2,
-    "rent"
-  );
-  document.getElementById("salary-country1").textContent = parseTeleportData(
-    data1,
-    "salary"
-  );
-  document.getElementById("salary-country2").textContent = parseTeleportData(
-    data2,
-    "salary"
-  );
+    const cost1 = d1.cost_of_living_usd || 0;
+    const cost2 = d2.cost_of_living_usd || 0;
+    document.getElementById("cost-country1").textContent = cost1
+      ? `$${cost1}`
+      : "—";
+    document.getElementById("cost-country2").textContent = cost2
+      ? `$${cost2}`
+      : "—";
+    highlightBetter("cost", cost1, cost2, true);
 
-  // Остальные поля можно оставить как есть или доработать парсинг
+    const rent1 = d1.rent_usd || 0;
+    const rent2 = d2.rent_usd || 0;
+    document.getElementById("rent-country1").textContent = rent1
+      ? `$${rent1}`
+      : "—";
+    document.getElementById("rent-country2").textContent = rent2
+      ? `$${rent2}`
+      : "—";
+    highlightBetter("rent", rent1, rent2, true);
 
-  updateTable(countryData, key1, "country1");
-  updateTable(countryData, key2, "country2");
+    const food1 = d1.groceries_usd || 0;
+    const food2 = d2.groceries_usd || 0;
+    document.getElementById("groceries-country1").textContent = food1
+      ? `$${food1}`
+      : "—";
+    document.getElementById("groceries-country2").textContent = food2
+      ? `$${food2}`
+      : "—";
+    highlightBetter("groceries", food1, food2, true);
 
-  hideSpinner();
-  syncSelectOptions();
-  const offset = -350;
-  const block = document.querySelector(".comparison-section");
-  const top = block.getBoundingClientRect().top + window.scrollY - offset;
+    const transport1 = d1.transport_usd || 0;
+    const transport2 = d2.transport_usd || 0;
+    document.getElementById("transport-country1").textContent = transport1
+      ? `$${transport1}`
+      : "—";
+    document.getElementById("transport-country2").textContent = transport2
+      ? `$${transport2}`
+      : "—";
+    highlightBetter("transport", transport1, transport2, true);
 
-  window.scrollTo({
-    top,
-    behavior: "smooth",
-  });
+    const salary1 = d1.salary_usd || 0;
+    const salary2 = d2.salary_usd || 0;
+    document.getElementById("salary-country1").textContent = salary1
+      ? `$${salary1}`
+      : "—";
+    document.getElementById("salary-country2").textContent = salary2
+      ? `$${salary2}`
+      : "—";
+    highlightBetter("salary", salary1, salary2, false);
+
+    updateTable(countryData, key1, "country1");
+    updateTable(countryData, key2, "country2");
+
+    hideSpinner();
+    syncSelectOptions();
+    const offset = -350;
+    const block = document.querySelector(".comparison-section");
+    const top = block.getBoundingClientRect().top + window.scrollY - offset;
+
+    window.scrollTo({
+      top,
+      behavior: "smooth",
+    });
+  }, 400);
 }
 
 if (select1 && select2 && table) {
