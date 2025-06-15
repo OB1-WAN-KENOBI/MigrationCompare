@@ -11,7 +11,7 @@ export const countryData = {
   },
   serbia: {
     climate: "Континентальный",
-    safety: "Выше среднего",
+    safety: "Средняя",
     healthcare: "Средняя",
     internet: "Хороший",
     nomadVisa: "Да",

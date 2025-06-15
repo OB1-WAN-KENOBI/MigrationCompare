@@ -157,6 +157,14 @@ function update() {
 
     hideSpinner();
     syncSelectOptions();
+    const offset = -350;
+    const block = document.querySelector(".comparison-section");
+    const top = block.getBoundingClientRect().top + window.scrollY - offset;
+
+    window.scrollTo({
+      top,
+      behavior: "smooth",
+    });
   }, 400);
 }
 

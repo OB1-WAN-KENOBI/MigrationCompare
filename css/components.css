@@ -147,3 +147,25 @@
   background-color: #e3fbe3;
   font-weight: bold;
 }
+
+#export-pdf.button {
+  padding: 12px 24px;
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+#export-pdf.button:hover {
+  background-color: #1565c0;
+}
+
+.print-mode {
+  box-shadow: none;
+  overflow: visible;
+  background: white;
+}
