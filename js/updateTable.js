@@ -1,25 +1,21 @@
 export function updateTable(data, countryKey, prefix) {
-  const fields = [
-    "cost",
-    "climate",
-    "safety",
-    "healthcare",
-    "internet",
-    "nomadVisa",
-    "banking",
-  ];
+  if (!data || !data[countryKey]) return;
 
-  if (!data || !data[countryKey]) {
-    // Очистить поля, если countryKey пустой или не найден
-    fields.forEach((field) => {
-      document.getElementById(`${field}-${prefix}`).textContent = "";
-    });
-    return;
-  }
+  const map = {
+    climate: "climate",
+    safety: "safety",
+    healthcare: "healthcare",
+    internet: "internet",
+    nomadVisa: "nomadVisa",
+    banking: "banking",
+    russianCommunity: "russian-community",
+    visaRequired: "visa", // 👈 кастомный id
+  };
 
   const values = data[countryKey];
 
-  fields.forEach((field) => {
-    document.getElementById(`${field}-${prefix}`).textContent = values[field];
-  });
+  for (const [field, idPart] of Object.entries(map)) {
+    const el = document.getElementById(`${idPart}-${prefix}`);
+    if (el) el.textContent = values[field] || "—";
+  }
 }

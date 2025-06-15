@@ -18,8 +18,8 @@
     <div class="container header-content">
       <div class="logo">MigrationCompare</div>
       <nav class="nav">
-        <a href="#">Главная</a>
-        <a href="#">Страны</a>
+        <a href="index.html">Главная</a>
+        <a href="countries.html">Страны</a> <!-- ✅ переход сюда -->
         <a href="#">О нас</a>
       </nav>
     </div>
@@ -70,53 +70,32 @@
       <!-- Таблица сравнения -->
       <div class="table-wrapper">
         <div class="spinner" id="table-spinner"></div>
-      <table class="comparison-table">
-        <thead>
-          <tr>
-            <th>Критерий</th>
-            <th id="country1-header">Страна 1</th>
-            <th id="country2-header">Страна 2</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Стоимость жизни</td>
-            <td id="cost-country1"></td>
-            <td id="cost-country2"></td>
-          </tr>
-          <tr>
-            <td>Климат</td>
-            <td id="climate-country1"></td>
-            <td id="climate-country2"></td>
-          </tr>
-          <tr>
-            <td>Безопасность</td>
-            <td id="safety-country1"></td>
-            <td id="safety-country2"></td>
-          </tr>
-          <tr>
-            <td>Медицина</td>
-            <td id="healthcare-country1"></td>
-            <td id="healthcare-country2"></td>
-          </tr>
-          <tr>
-            <td>Интернет и связь</td>
-            <td id="internet-country1"></td>
-            <td id="internet-country2"></td>
-          </tr>
-          <tr>
-            <td>Digital Nomad виза</td>
-            <td id="nomadVisa-country1"></td>
-            <td id="nomadVisa-country2"></td>
-          </tr>
-          <tr>
-            <td>Банковская система</td>
-            <td id="banking-country1"></td>
-            <td id="banking-country2"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Критерий</th>
+              <th id="country1-header">Страна 1</th>
+              <th id="country2-header">Страна 2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Стоимость жизни (в месяц)</td><td id="cost-country1"></td><td id="cost-country2"></td></tr>
+            <tr><td>Аренда жилья</td><td id="rent-country1"></td><td id="rent-country2"></td></tr>
+            <tr><td>Продукты</td><td id="groceries-country1"></td><td id="groceries-country2"></td></tr>
+            <tr><td>Транспорт</td><td id="transport-country1"></td><td id="transport-country2"></td></tr>
+            <tr><td>Средняя зарплата</td><td id="salary-country1"></td><td id="salary-country2"></td></tr>
+            <tr><td>Климат</td><td id="climate-country1"></td><td id="climate-country2"></td></tr>
+            <tr><td>Безопасность</td><td id="safety-country1"></td><td id="safety-country2"></td></tr>
+            <tr><td>Медицина</td><td id="healthcare-country1"></td><td id="healthcare-country2"></td></tr>
+            <tr><td>Интернет (скорость)</td><td id="internet-country1"></td><td id="internet-country2"></td></tr>
+            <tr><td>Русскоязычное сообщество</td><td id="russian-community-country1"></td><td id="russian-community-country2"></td></tr>
+            <tr><td>Нужна ли виза</td><td id="visa-country1"></td><td id="visa-country2"></td></tr>
+            <tr><td>Digital Nomad виза</td><td id="nomadVisa-country1"></td><td id="nomadVisa-country2"></td></tr>
+            <tr><td>Банковская система</td><td id="banking-country1"></td><td id="banking-country2"></td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </main>
 

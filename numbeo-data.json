@@ -1,0 +1,72 @@
+{
+  "armenia": {
+    "cost_of_living_usd": 700,
+    "rent_usd": 300,
+    "groceries_usd": 220,
+    "transport_usd": 25,
+    "salary_usd": 500
+  },
+  "serbia": {
+    "cost_of_living_usd": 800,
+    "rent_usd": 350,
+    "groceries_usd": 280,
+    "transport_usd": 28,
+    "salary_usd": 650
+  },
+  "philippines": {
+    "cost_of_living_usd": 750,
+    "rent_usd": 320,
+    "groceries_usd": 260,
+    "transport_usd": 20,
+    "salary_usd": 450
+  },
+  "vietnam": {
+    "cost_of_living_usd": 730,
+    "rent_usd": 310,
+    "groceries_usd": 250,
+    "transport_usd": 15,
+    "salary_usd": 470
+  },
+  "albania": {
+    "cost_of_living_usd": 720,
+    "rent_usd": 290,
+    "groceries_usd": 240,
+    "transport_usd": 22,
+    "salary_usd": 480
+  },
+  "georgia": {
+    "cost_of_living_usd": 740,
+    "rent_usd": 310,
+    "groceries_usd": 245,
+    "transport_usd": 18,
+    "salary_usd": 490
+  },
+  "mexico": {
+    "cost_of_living_usd": 820,
+    "rent_usd": 420,
+    "groceries_usd": 330,
+    "transport_usd": 30,
+    "salary_usd": 750
+  },
+  "portugal": {
+    "cost_of_living_usd": 1100,
+    "rent_usd": 700,
+    "groceries_usd": 350,
+    "transport_usd": 40,
+    "salary_usd": 1200
+  },
+  "thailand": {
+    "cost_of_living_usd": 850,
+    "rent_usd": 400,
+    "groceries_usd": 320,
+    "transport_usd": 25,
+    "salary_usd": 600
+  },
+  "turkiye": {
+    "cost_of_living_usd": 680,
+    "rent_usd": 280,
+    "groceries_usd": 230,
+    "transport_usd": 15,
+    "salary_usd": 440
+  }
+}
