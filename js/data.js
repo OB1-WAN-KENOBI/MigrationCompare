@@ -1,6 +1,6 @@
 // data.js
 export const countryData = {
-  армения: {
+  armenia: {
     cost: "$900",
     climate: "Умеренный",
     safety: "Средняя",
@@ -9,7 +9,7 @@ export const countryData = {
     nomadVisa: "Нет",
     banking: "Средний уровень",
   },
-  сербия: {
+  serbia: {
     cost: "$800",
     climate: "Континентальный",
     safety: "Выше среднего",
@@ -18,7 +18,7 @@ export const countryData = {
     nomadVisa: "Да",
     banking: "Развитая",
   },
-  филиппины: {
+  philippines: {
     cost: "$750",
     climate: "Тропический",
     safety: "Низкая",
@@ -27,7 +27,7 @@ export const countryData = {
     nomadVisa: "Нет",
     banking: "Ограниченная",
   },
-  вьетнам: {
+  vietnam: {
     cost: "$700",
     climate: "Тропический",
     safety: "Средняя",
@@ -36,7 +36,7 @@ export const countryData = {
     nomadVisa: "Пока нет",
     banking: "Средний",
   },
-  албания: {
+  albania: {
     cost: "$650",
     climate: "Средиземноморский",
     safety: "Хорошая",
@@ -45,7 +45,7 @@ export const countryData = {
     nomadVisa: "Да",
     banking: "Развивающаяся",
   },
-  грузия: {
+  georgia: {
     cost: "$600",
     climate: "Умеренно-континентальный",
     safety: "Средняя",
@@ -54,7 +54,7 @@ export const countryData = {
     nomadVisa: "Да",
     banking: "Развивающаяся",
   },
-  мексика: {
+  mexico: {
     cost: "$900",
     climate: "Тропический/сухой",
     safety: "Средняя",
@@ -63,7 +63,7 @@ export const countryData = {
     nomadVisa: "Да",
     banking: "Развитая",
   },
-  португалия: {
+  portugal: {
     cost: "$1200",
     climate: "Средиземноморский",
     safety: "Высокая",
@@ -72,7 +72,7 @@ export const countryData = {
     nomadVisa: "Да",
     banking: "Развитая",
   },
-  таиланд: {
+  thailand: {
     cost: "$800",
     climate: "Тропический",
     safety: "Средняя",
@@ -81,7 +81,7 @@ export const countryData = {
     nomadVisa: "Пока нет",
     banking: "Средняя",
   },
-  турция: {
+  turkiye: {
     cost: "$700",
     climate: "Разнообразный",
     safety: "Средняя",

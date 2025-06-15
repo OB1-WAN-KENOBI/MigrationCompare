@@ -11,15 +11,55 @@ function normalize(str) {
   return str.trim().toLowerCase();
 }
 
+function showSpinner() {
+  document.getElementById("table-spinner").style.display = "block";
+  document.querySelector(".comparison-table").style.opacity = "0.3";
+}
+
+function hideSpinner() {
+  document.getElementById("table-spinner").style.display = "none";
+  document.querySelector(".comparison-table").style.opacity = "1";
+}
+
+function clearTable() {
+  const fields = [
+    "cost",
+    "climate",
+    "safety",
+    "healthcare",
+    "internet",
+    "nomadVisa",
+    "banking",
+  ];
+  fields.forEach((field) => {
+    document.getElementById(`${field}-country1`).textContent = "";
+    document.getElementById(`${field}-country2`).textContent = "";
+  });
+}
+
 function update() {
-  const val1 = normalize(select1.options[select1.selectedIndex].text);
-  const val2 = normalize(select2.options[select2.selectedIndex].text);
+  const key1 = normalize(select1.value); // ключи → на английском: 'armenia'
+  const key2 = normalize(select2.value);
 
-  header1.textContent = val1 || "Страна 1";
-  header2.textContent = val2 || "Страна 2";
+  const label1 = select1.options[select1.selectedIndex]?.text;
+  const label2 = select2.options[select2.selectedIndex]?.text;
 
-  updateTable(countryData, val1, "country1");
-  updateTable(countryData, val2, "country2");
+  header1.textContent = label1 || "Страна 1";
+  header2.textContent = label2 || "Страна 2";
+
+  if (!key1 || !key2) {
+    hideSpinner();
+    clearTable();
+    return;
+  }
+
+  showSpinner();
+
+  setTimeout(() => {
+    updateTable(countryData, key1, "country1");
+    updateTable(countryData, key2, "country2");
+    hideSpinner();
+  }, 400);
 }
 
 select1.addEventListener("change", update);
