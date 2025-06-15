@@ -49,3 +49,20 @@
   margin-top: 60px;
   font-size: 14px;
 }
+
+/* Только для страницы "О нас" */
+body.about-page, html.about-page {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body.about-page .page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body.about-page main {
+  flex: 1;
+}
