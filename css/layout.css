@@ -51,7 +51,8 @@
 }
 
 /* Только для страницы "О нас" */
-body.about-page, html.about-page {
+body.about-page,
+html.about-page {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -65,4 +66,59 @@ body.about-page .page {
 
 body.about-page main {
   flex: 1;
+}
+
+/* Мобильная навигация */
+@media (max-width: 768px) {
+  .header-content {
+    width: 100%;
+    padding: 0 15px;
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background: #1e2a38 !important;
+    padding: 80px 20px 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    z-index: 2000 !important;
+  }
+
+  .nav.active {
+    right: 0;
+  }
+
+  .nav a {
+    color: #fff !important;
+    font-size: 22px !important;
+    padding: 20px 0 !important;
+    margin: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    width: 100% !important;
+    text-align: left !important;
+    display: block !important;
+    background: none !important;
+  }
+
+  .nav a:last-child {
+    border-bottom: none !important;
+  }
+
+  .nav a:hover,
+  .nav a:active {
+    background: rgba(247, 215, 116, 0.08) !important;
+    color: #f7d774 !important;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+    z-index: 1001;
+  }
 }

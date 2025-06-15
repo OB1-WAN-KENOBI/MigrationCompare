@@ -3,6 +3,7 @@ import { countryData } from "./data.js";
 
 const select1 = document.getElementById("country1");
 const select2 = document.getElementById("country2");
+const table = document.querySelector(".comparison-table");
 
 const header1 = document.getElementById("country1-header");
 const header2 = document.getElementById("country2-header");
@@ -168,5 +169,56 @@ function update() {
   }, 400);
 }
 
-select1.addEventListener("change", update);
-select2.addEventListener("change", update);
+if (select1 && select2 && table) {
+  select1.addEventListener("change", update);
+  select2.addEventListener("change", update);
+}
+
+function initMobileMenu() {
+  const menuToggle = document.querySelector(".mobile-menu-toggle");
+  const nav = document.querySelector(".nav");
+  const body = document.body;
+  if (!menuToggle || !nav) return;
+
+  menuToggle.addEventListener("click", function () {
+    nav.classList.toggle("active");
+    body.classList.toggle("menu-open");
+    // Анимация бургер-меню
+    const spans = this.querySelectorAll("span");
+    spans[0].classList.toggle("rotate-45");
+    spans[1].classList.toggle("opacity-0");
+    spans[2].classList.toggle("rotate-negative-45");
+  });
+
+  document.addEventListener("click", function (e) {
+    if (
+      !nav.contains(e.target) &&
+      !menuToggle.contains(e.target) &&
+      nav.classList.contains("active")
+    ) {
+      nav.classList.remove("active");
+      body.classList.remove("menu-open");
+      const spans = menuToggle.querySelectorAll("span");
+      spans[0].classList.remove("rotate-45");
+      spans[1].classList.remove("opacity-0");
+      spans[2].classList.remove("rotate-negative-45");
+    }
+  });
+
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 768 && nav.classList.contains("active")) {
+      nav.classList.remove("active");
+      body.classList.remove("menu-open");
+      const spans = menuToggle.querySelectorAll("span");
+      spans[0].classList.remove("rotate-45");
+      spans[1].classList.remove("opacity-0");
+      spans[2].classList.remove("rotate-negative-45");
+    }
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initMobileMenu);
+} else {
+  initMobileMenu();
+}
