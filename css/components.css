@@ -238,3 +238,36 @@ body.menu-open::after {
 .nav a.active::after {
   width: 100%;
 }
+
+/* Aviasales style button */
+.aviasales-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #007aff;
+  color: #fff !important;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 16px 32px;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.1);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+.aviasales-btn:hover,
+.aviasales-btn:focus {
+  background: #005ecb;
+  box-shadow: 0 4px 16px rgba(0, 122, 255, 0.18);
+  transform: translateY(-2px) scale(1.03);
+  color: #fff;
+  text-decoration: none;
+}
+.aviasales-btn .plane {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  margin-right: 4px;
+  vertical-align: middle;
+}

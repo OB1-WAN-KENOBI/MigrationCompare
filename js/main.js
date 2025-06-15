@@ -23,6 +23,19 @@ const citySlugs = {
   turkiye: "istanbul",
 };
 
+const iataCodes = {
+  armenia: "EVN",
+  serbia: "BEG",
+  philippines: "MNL",
+  vietnam: "HAN",
+  albania: "TIA",
+  georgia: "TBS",
+  mexico: "MEX",
+  portugal: "LIS",
+  thailand: "BKK",
+  turkiye: "IST",
+};
+
 async function fetchTeleportData(countryKey) {
   const slug = citySlugs[countryKey];
   if (!slug) return null;
@@ -130,6 +143,47 @@ function highlightBetter(field, v1, v2, lowerIsBetter = true) {
   better.classList.add("highlight-better");
 }
 
+function getCountryKeyByLabel(label) {
+  if (!label) return null;
+  const lower = label.toLowerCase();
+  return Object.keys(iataCodes).find((key) => lower.includes(key));
+}
+
+function getDateInTwoWeeks() {
+  const date = new Date();
+  date.setDate(date.getDate() + 14);
+  return date;
+}
+
+function formatAviasalesDate(dateObj) {
+  const day = String(dateObj.getDate()).padStart(2, "0");
+  const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+  return day + month;
+}
+
+function updateAviaButtons(key1, key2) {
+  const avia = document.getElementById("avia-buttons");
+  if (!iataCodes[key1] || !iataCodes[key2]) {
+    avia.innerHTML = "";
+    return;
+  }
+  const dateObj = getDateInTwoWeeks();
+  const dateStr = formatAviasalesDate(dateObj);
+  const planeIcon = `<span class='plane' aria-hidden='true'><svg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M2 19L20 11L2 3V9L17 11L2 13V19Z' fill='white'/></svg></span>`;
+  avia.innerHTML = `
+    <a href="https://www.aviasales.ru/search/MOW${dateStr}${
+    iataCodes[key1]
+  }" target="_blank" class="aviasales-btn">${planeIcon}Авиабилеты в ${
+    select1.options[select1.selectedIndex].text
+  }</a>
+    <a href="https://www.aviasales.ru/search/MOW${dateStr}${
+    iataCodes[key2]
+  }" target="_blank" class="aviasales-btn">${planeIcon}Авиабилеты в ${
+    select2.options[select2.selectedIndex].text
+  }</a>
+  `;
+}
+
 function update() {
   const key1 = normalize(select1.value);
   const key2 = normalize(select2.value);
@@ -216,6 +270,8 @@ function update() {
       top,
       behavior: "smooth",
     });
+
+    updateAviaButtons(key1, key2);
   }, 400);
 }
 
