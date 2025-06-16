@@ -1,3 +1,5 @@
+import "../css/layout.css";
+
 document.addEventListener("DOMContentLoaded", () => {
   const exportBtn = document.getElementById("export-pdf");
 

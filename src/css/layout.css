@@ -1,3 +1,9 @@
+@import url(./base.css);
+@import url(./components.css);
+@import url(./countries.css);
+@import url(./responsive.css);
+
+
 /* Контейнер для основного контента: центрирование и максимальная ширина */
 .container {
   display: flex;

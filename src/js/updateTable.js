@@ -1,3 +1,5 @@
+import "../css/layout.css";
+
 // Функция обновляет значения в таблице для выбранной страны
 export function updateTable(data, countryKey, prefix) {
   // Если нет данных или выбранного ключа, выходим
@@ -46,8 +48,3 @@ function highlightDifferences() {
   el1.style.backgroundColor = cost1 < cost2 ? "#e6ffed" : "#ffe6e6";
   el2.style.backgroundColor = cost2 < cost1 ? "#e6ffed" : "#ffe6e6";
 }
-
-// Пример инициализации: вызывать после загрузки данных и отрисовки таблицы
-// updateTable(data, 'country1', 'country1');
-// updateTable(data, 'country2', 'country2');
-// highlightDifferences();

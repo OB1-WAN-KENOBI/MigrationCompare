@@ -1,3 +1,5 @@
+import '../css/layout.css'
+import "./pdf-export.js";
 import { updateTable } from "./updateTable.js";
 import { countryData } from "./data.js";
 
