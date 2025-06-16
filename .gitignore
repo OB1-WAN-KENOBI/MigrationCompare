@@ -1,0 +1,19 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Webpack output
+dist/
+
+# VS Code settings (если используешь)
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Optional: OS-specific
+.idea/         # WebStorm / PhpStorm
+*.sublime-*    # Sublime Text
