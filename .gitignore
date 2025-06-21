@@ -10,10 +10,8 @@ dist/
 # VS Code settings (если используешь)
 .vscode/
 
-# System files
+
 .DS_Store
 Thumbs.db
 
-# Optional: OS-specific
-.idea/         # WebStorm / PhpStorm
-*.sublime-*    # Sublime Text
+
