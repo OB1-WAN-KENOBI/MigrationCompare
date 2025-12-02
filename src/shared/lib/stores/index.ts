@@ -1,0 +1,1 @@
+export { compareStore } from './compareStore';

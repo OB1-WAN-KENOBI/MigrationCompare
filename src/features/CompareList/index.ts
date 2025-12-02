@@ -1,0 +1,1 @@
+export { CompareList } from './CompareList';

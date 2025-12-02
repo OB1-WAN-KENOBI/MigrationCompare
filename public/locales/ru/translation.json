@@ -1,0 +1,130 @@
+{
+  "app": {
+    "title": "MigrationCompare",
+    "subtitle": "Сравнение стран для миграции"
+  },
+  "nav": {
+    "home": "Главная",
+    "countries": "Страны",
+    "compare": "Сравнение",
+    "favorites": "Избранное",
+    "about": "О нас"
+  },
+  "countries": {
+    "title": "Страны для миграции",
+    "search": "Поиск по названию...",
+    "noResults": "Страны не найдены",
+    "addToCompare": "Добавить в сравнение",
+    "removeFromCompare": "Удалить из сравнения",
+    "addToFavorites": "В избранное",
+    "removeFromFavorites": "Убрать из избранного",
+    "viewDetails": "Подробнее",
+    "count_one": "{{count}} страна",
+    "count_few": "{{count}} страны",
+    "count_many": "{{count}} стран"
+  },
+  "filters": {
+    "title": "Фильтры",
+    "safety": "Безопасность",
+    "climate": "Климат",
+    "visa": "Визовый режим",
+    "englishLevel": "Уровень английского",
+    "rent": "Аренда ($/мес)",
+    "taxes": "Налоги (%)",
+    "reset": "Сбросить фильтры"
+  },
+  "sort": {
+    "title": "Сортировка",
+    "rent": "По аренде",
+    "safety": "По безопасности",
+    "immigrationDifficulty": "По сложности иммиграции",
+    "salary": "По зарплате",
+    "costOfLiving": "По стоимости жизни"
+  },
+  "country": {
+    "population": "Население",
+    "language": "Язык",
+    "currency": "Валюта",
+    "visa": "Визовый режим",
+    "costOfLiving": "Стоимость жизни",
+    "safety": "Безопасность",
+    "internetSpeed": "Скорость интернета",
+    "climate": "Климат",
+    "salary": "Средняя зарплата",
+    "rent": "Аренда жилья",
+    "groceries": "Продукты",
+    "immigrationDifficulty": "Сложность иммиграции",
+    "taxes": "Налоги",
+    "freelanceFriendly": "Фриланс",
+    "englishLevel": "Уровень английского",
+    "healthcare": "Здравоохранение",
+    "transport": "Транспорт",
+    "nomadVisa": "Виза цифрового кочевника",
+    "banking": "Банковская система",
+    "russianCommunity": "Русскоязычное сообщество",
+    "perMonth": "мес",
+    "english": "Уровень английского",
+    "immigration": "Сложность иммиграции",
+    "mbps": "Мбит/с"
+  },
+  "values": {
+    "safety": {
+      "low": "Низкая",
+      "medium": "Средняя",
+      "high": "Высокая"
+    },
+    "immigration": {
+      "easy": "Лёгкая",
+      "medium": "Средняя",
+      "hard": "Сложная"
+    },
+    "english": {
+      "low": "Низкий",
+      "medium": "Средний",
+      "high": "Высокий"
+    },
+    "healthcare": {
+      "basic": "Базовое",
+      "medium": "Среднее",
+      "good": "Хорошее"
+    },
+    "climate": {
+      "continental": "Континентальный",
+      "tropical": "Тропический",
+      "mediterranean": "Средиземноморский",
+      "moderate": "Умеренный",
+      "diverse": "Разнообразный",
+      "dry": "Сухой"
+    },
+    "yes": "Да",
+    "no": "Нет"
+  },
+  "compare": {
+    "title": "Сравнение стран",
+    "empty": "Добавьте страны для сравнения",
+    "emptyHint": "Выберите страны на главной странице",
+    "remove": "Удалить",
+    "better": "Лучше",
+    "worse": "Хуже",
+    "average": "Среднее"
+  },
+  "favorites": {
+    "title": "Избранные страны",
+    "empty": "Нет избранных стран",
+    "emptyHint": "Нажмите на сердечко на карточке страны, чтобы добавить в избранное",
+    "browseCountries": "Перейти к странам"
+  },
+  "charts": {
+    "costs": "Расходы",
+    "quality": "Качество жизни"
+  },
+  "theme": {
+    "light": "Светлая тема",
+    "dark": "Тёмная тема",
+    "system": "Системная"
+  },
+  "language": {
+    "ru": "Русский",
+    "en": "English"
+  }
+}

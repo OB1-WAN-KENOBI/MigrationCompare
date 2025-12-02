@@ -1,0 +1,129 @@
+{
+  "app": {
+    "title": "MigrationCompare",
+    "subtitle": "Compare countries for migration"
+  },
+  "nav": {
+    "home": "Home",
+    "countries": "Countries",
+    "compare": "Compare",
+    "favorites": "Favorites",
+    "about": "About"
+  },
+  "countries": {
+    "title": "Countries for migration",
+    "search": "Search by name...",
+    "noResults": "No countries found",
+    "addToCompare": "Add to compare",
+    "removeFromCompare": "Remove from compare",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "viewDetails": "View details",
+    "count_one": "{{count}} country",
+    "count_other": "{{count}} countries"
+  },
+  "filters": {
+    "title": "Filters",
+    "safety": "Safety",
+    "climate": "Climate",
+    "visa": "Visa policy",
+    "englishLevel": "English level",
+    "rent": "Rent ($/mo)",
+    "taxes": "Taxes (%)",
+    "reset": "Reset filters"
+  },
+  "sort": {
+    "title": "Sort",
+    "rent": "By rent",
+    "safety": "By safety",
+    "immigrationDifficulty": "By immigration difficulty",
+    "salary": "By salary",
+    "costOfLiving": "By cost of living"
+  },
+  "country": {
+    "population": "Population",
+    "language": "Language",
+    "currency": "Currency",
+    "visa": "Visa policy",
+    "costOfLiving": "Cost of living",
+    "safety": "Safety",
+    "internetSpeed": "Internet speed",
+    "climate": "Climate",
+    "salary": "Average salary",
+    "rent": "Rent",
+    "groceries": "Groceries",
+    "immigrationDifficulty": "Immigration difficulty",
+    "taxes": "Taxes",
+    "freelanceFriendly": "Freelance friendly",
+    "englishLevel": "English level",
+    "healthcare": "Healthcare",
+    "transport": "Transport",
+    "nomadVisa": "Digital nomad visa",
+    "banking": "Banking system",
+    "russianCommunity": "Russian community",
+    "perMonth": "mo",
+    "english": "English level",
+    "immigration": "Immigration difficulty",
+    "mbps": "Mbps"
+  },
+  "values": {
+    "safety": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "immigration": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "english": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "healthcare": {
+      "basic": "Basic",
+      "medium": "Medium",
+      "good": "Good"
+    },
+    "climate": {
+      "continental": "Continental",
+      "tropical": "Tropical",
+      "mediterranean": "Mediterranean",
+      "moderate": "Moderate",
+      "diverse": "Diverse",
+      "dry": "Dry"
+    },
+    "yes": "Yes",
+    "no": "No"
+  },
+  "compare": {
+    "title": "Compare countries",
+    "empty": "Add countries to compare",
+    "emptyHint": "Select countries from the main page",
+    "remove": "Remove",
+    "better": "Better",
+    "worse": "Worse",
+    "average": "Average"
+  },
+  "favorites": {
+    "title": "Favorite countries",
+    "empty": "No favorite countries",
+    "emptyHint": "Click the heart icon on a country card to add to favorites",
+    "browseCountries": "Browse countries"
+  },
+  "charts": {
+    "costs": "Costs",
+    "quality": "Quality of life"
+  },
+  "theme": {
+    "light": "Light theme",
+    "dark": "Dark theme",
+    "system": "System"
+  },
+  "language": {
+    "ru": "Русский",
+    "en": "English"
+  }
+}
