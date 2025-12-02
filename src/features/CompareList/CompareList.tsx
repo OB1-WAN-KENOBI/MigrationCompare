@@ -25,14 +25,11 @@ export const CompareList = memo(({ count }: CompareListProps) => {
         <Button
           variant={count > 0 ? 'contained' : 'outlined'}
           onClick={handleClick}
-          startIcon={
-            <Badge badgeContent={count} color="error">
-              <CompareArrowsIcon />
-            </Badge>
-          }
           sx={{ minWidth: 'auto', px: 2 }}
         >
-          {count > 0 && count}
+          <Badge badgeContent={count} color="error">
+            <CompareArrowsIcon />
+          </Badge>
         </Button>
       </Tooltip>
     </Box>
