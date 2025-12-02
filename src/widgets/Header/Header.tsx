@@ -14,7 +14,9 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
+import Switch from '@mui/material/Switch';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -23,6 +25,8 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import LanguageIcon from '@mui/icons-material/Language';
 import PublicIcon from '@mui/icons-material/Public';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import HomeIcon from '@mui/icons-material/Home';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import Badge from '@mui/material/Badge';
 import Tooltip from '@mui/material/Tooltip';
 import { useThemeMode } from '@app/providers';
@@ -72,7 +76,8 @@ export const Header = () => {
   };
 
   const drawer = (
-    <Box sx={{ width: 250 }}>
+    <Box sx={{ width: 280 }}>
+      {/* Header */}
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
         <PublicIcon color="primary" />
         <Typography variant="h6" fontWeight={700}>
@@ -80,17 +85,79 @@ export const Header = () => {
         </Typography>
       </Box>
       <Divider />
+
+      {/* Navigation */}
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item.key} disablePadding>
-            <ListItemButton
-              onClick={() => handleNavClick(item.path)}
-              selected={location.pathname === item.path}
-            >
-              <ListItemText primary={t(`nav.${item.key}`)} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => handleNavClick('/')} selected={location.pathname === '/'}>
+            <ListItemIcon>
+              <HomeIcon color={location.pathname === '/' ? 'primary' : 'inherit'} />
+            </ListItemIcon>
+            <ListItemText primary={t('nav.home')} />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => handleNavClick('/compare')}
+            selected={location.pathname === '/compare'}
+          >
+            <ListItemIcon>
+              <Badge badgeContent={compareCount} color="error">
+                <CompareArrowsIcon
+                  color={location.pathname === '/compare' ? 'primary' : 'inherit'}
+                />
+              </Badge>
+            </ListItemIcon>
+            <ListItemText primary={t('nav.compare')} />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => handleNavClick('/favorites')}
+            selected={location.pathname === '/favorites'}
+          >
+            <ListItemIcon>
+              <Badge badgeContent={favorites.length} color="error">
+                <FavoriteIcon color={location.pathname === '/favorites' ? 'error' : 'inherit'} />
+              </Badge>
+            </ListItemIcon>
+            <ListItemText primary={t('nav.favorites')} />
+          </ListItemButton>
+        </ListItem>
+      </List>
+
+      <Divider />
+
+      {/* Settings */}
+      <List>
+        {/* Theme toggle */}
+        <ListItem>
+          <ListItemIcon>{mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}</ListItemIcon>
+          <ListItemText primary={mode === 'dark' ? t('theme.dark') : t('theme.light')} />
+          <Switch edge="end" checked={mode === 'dark'} onChange={toggleTheme} />
+        </ListItem>
+
+        {/* Language */}
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => handleLanguageChange(i18n.language === 'ru' ? 'en' : 'ru')}
+          >
+            <ListItemIcon>
+              <LanguageIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={t('language.ru')}
+              secondary={i18n.language === 'ru' ? '✓' : ''}
+            />
+            <ListItemText
+              primary={t('language.en')}
+              secondary={i18n.language === 'en' ? '✓' : ''}
+              sx={{ textAlign: 'right' }}
+            />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -132,6 +199,7 @@ export const Header = () => {
                 background: 'linear-gradient(135deg, #22d3ee 0%, #6366f1 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
+                display: { xs: 'none', sm: 'block' },
               }}
             >
               {t('app.title')}
@@ -155,43 +223,53 @@ export const Header = () => {
             </Box>
           )}
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1 } }}>
+            {/* Compare - always visible */}
             <CompareList count={compareCount} />
 
+            {/* Favorites - always visible */}
             <Tooltip title={t('nav.favorites')}>
               <IconButton
                 onClick={() => void navigate('/favorites')}
                 sx={{ color: location.pathname === '/favorites' ? 'error.main' : 'text.secondary' }}
+                size={isMobile ? 'small' : 'medium'}
               >
                 <Badge badgeContent={favorites.length} color="error">
-                  <FavoriteIcon />
+                  <FavoriteIcon fontSize={isMobile ? 'small' : 'medium'} />
                 </Badge>
               </IconButton>
             </Tooltip>
 
-            <IconButton onClick={handleLangMenuOpen} sx={{ color: 'text.secondary' }}>
-              <LanguageIcon />
-            </IconButton>
-            <Menu
-              anchorEl={langAnchorEl}
-              open={Boolean(langAnchorEl)}
-              onClose={handleLangMenuClose}
-            >
-              <MenuItem
-                onClick={() => handleLanguageChange('ru')}
-                selected={i18n.language === 'ru'}
+            {/* Language - desktop only */}
+            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+              <IconButton onClick={handleLangMenuOpen} sx={{ color: 'text.secondary' }}>
+                <LanguageIcon />
+              </IconButton>
+              <Menu
+                anchorEl={langAnchorEl}
+                open={Boolean(langAnchorEl)}
+                onClose={handleLangMenuClose}
               >
-                {t('language.ru')}
-              </MenuItem>
-              <MenuItem
-                onClick={() => handleLanguageChange('en')}
-                selected={i18n.language === 'en'}
-              >
-                {t('language.en')}
-              </MenuItem>
-            </Menu>
+                <MenuItem
+                  onClick={() => handleLanguageChange('ru')}
+                  selected={i18n.language === 'ru'}
+                >
+                  {t('language.ru')}
+                </MenuItem>
+                <MenuItem
+                  onClick={() => handleLanguageChange('en')}
+                  selected={i18n.language === 'en'}
+                >
+                  {t('language.en')}
+                </MenuItem>
+              </Menu>
+            </Box>
 
-            <IconButton onClick={toggleTheme} sx={{ color: 'text.secondary' }}>
+            {/* Theme toggle - desktop only */}
+            <IconButton
+              onClick={toggleTheme}
+              sx={{ color: 'text.secondary', display: { xs: 'none', md: 'flex' } }}
+            >
               {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
           </Box>
