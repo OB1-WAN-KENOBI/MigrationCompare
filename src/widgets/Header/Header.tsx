@@ -161,7 +161,7 @@ export const Header = () => {
             <Tooltip title={t('nav.favorites')}>
               <IconButton
                 onClick={() => void navigate('/favorites')}
-                color={location.pathname === '/favorites' ? 'error' : 'inherit'}
+                sx={{ color: location.pathname === '/favorites' ? 'error.main' : 'text.secondary' }}
               >
                 <Badge badgeContent={favorites.length} color="error">
                   <FavoriteIcon />
@@ -169,7 +169,7 @@ export const Header = () => {
               </IconButton>
             </Tooltip>
 
-            <IconButton onClick={handleLangMenuOpen} color="inherit">
+            <IconButton onClick={handleLangMenuOpen} sx={{ color: 'text.secondary' }}>
               <LanguageIcon />
             </IconButton>
             <Menu
@@ -191,7 +191,7 @@ export const Header = () => {
               </MenuItem>
             </Menu>
 
-            <IconButton onClick={toggleTheme} color="inherit">
+            <IconButton onClick={toggleTheme} sx={{ color: 'text.secondary' }}>
               {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
           </Box>

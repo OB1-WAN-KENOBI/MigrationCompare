@@ -2,9 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
-  base: '/MigrationCompare/',
+  base: mode === 'production' ? '/MigrationCompare/' : '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -24,4 +24,4 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
   },
-});
+}));

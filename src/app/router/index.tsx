@@ -35,30 +35,35 @@ const RootLayout = () => {
   );
 };
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <RootLayout />,
+      children: [
+        {
+          index: true,
+          element: <CountriesPage />,
+        },
+        {
+          path: 'country/:id',
+          element: <CountryPage />,
+        },
+        {
+          path: 'compare',
+          element: <ComparePage />,
+        },
+        {
+          path: 'favorites',
+          element: <FavoritesPage />,
+        },
+      ],
+    },
+  ],
   {
-    path: '/',
-    element: <RootLayout />,
-    children: [
-      {
-        index: true,
-        element: <CountriesPage />,
-      },
-      {
-        path: 'country/:id',
-        element: <CountryPage />,
-      },
-      {
-        path: 'compare',
-        element: <ComparePage />,
-      },
-      {
-        path: 'favorites',
-        element: <FavoritesPage />,
-      },
-    ],
-  },
-]);
+    basename: import.meta.env.BASE_URL,
+  }
+);
 
 export const AppRouter = () => {
   return <RouterProvider router={router} />;
