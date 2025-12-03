@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
@@ -17,6 +17,9 @@ import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import HomeIcon from '@mui/icons-material/Home';
 import { MetricChip } from '@shared/ui';
+import { searchCountryPhotos } from '@/shared/api/countries/pexels';
+import { QUERY_KEYS } from '@shared/config';
+import { useNormalizedLanguage } from '@shared/lib';
 import type { Country } from '@shared/types';
 
 interface CountryCardProps {
@@ -37,12 +40,21 @@ export const CountryCard = memo(
     onToggleFavorite,
     onToggleCompare,
   }: CountryCardProps) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
-    const currentLang = (i18n.language?.startsWith('ru') ? 'ru' : 'en') as 'ru' | 'en';
+    const queryClient = useQueryClient();
+    const currentLang = useNormalizedLanguage();
 
     const handleViewDetails = () => {
       void navigate(`/country/${country.id}`);
+    };
+
+    const handlePrefetchPhotos = () => {
+      void queryClient.prefetchQuery({
+        queryKey: [QUERY_KEYS.COUNTRY, 'photos', country.name.en],
+        queryFn: () => searchCountryPhotos(country.name.en, 5),
+        staleTime: 1000 * 60 * 60 * 24, // 24 часа
+      });
     };
 
     return (
@@ -57,16 +69,9 @@ export const CountryCard = memo(
             boxShadow: 6,
           },
         }}
+        onMouseEnter={handlePrefetchPhotos}
       >
-        {country.image ? (
-          <CardMedia
-            component="img"
-            height="120"
-            image={country.image}
-            alt={country.name[currentLang]}
-            sx={{ objectFit: 'cover' }}
-          />
-        ) : (
+        {
           <Box
             sx={{
               height: 120,
@@ -81,7 +86,7 @@ export const CountryCard = memo(
               {country.flag}
             </Typography>
           </Box>
-        )}
+        }
         <Box
           sx={{
             p: 2,
@@ -105,6 +110,9 @@ export const CountryCard = memo(
               onClick={() => onToggleFavorite(country.id)}
               color={isFavorite ? 'error' : 'default'}
               size="small"
+              aria-label={
+                isFavorite ? t('countries.removeFromFavorites') : t('countries.addToFavorites')
+              }
             >
               {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             </IconButton>
@@ -119,7 +127,9 @@ export const CountryCard = memo(
                 {t('country.costOfLiving')}:
               </Typography>
               <Typography variant="body2" fontWeight={600}>
-                ${country.costOfLiving}/{t('country.perMonth')}
+                {country.costOfLiving !== null
+                  ? `$${country.costOfLiving}/${t('country.perMonth')}`
+                  : '—'}
               </Typography>
             </Box>
 
@@ -129,7 +139,7 @@ export const CountryCard = memo(
                 {t('country.rent')}:
               </Typography>
               <Typography variant="body2" fontWeight={600}>
-                ${country.rent}/{t('country.perMonth')}
+                {country.rent !== null ? `$${country.rent}/${t('country.perMonth')}` : '—'}
               </Typography>
             </Box>
 
@@ -146,9 +156,11 @@ export const CountryCard = memo(
           <Divider sx={{ my: 2 }} />
 
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            <MetricChip type="safety" value={country.safety} showTooltip />
-            <MetricChip type="english" value={country.englishLevel} showTooltip />
-            <MetricChip type="immigration" value={country.immigrationDifficulty} showTooltip />
+            {country.safety !== null && (
+              <MetricChip type="safety" value={country.safety} showLabel />
+            )}
+            <MetricChip type="english" value={country.englishLevel} showLabel />
+            <MetricChip type="immigration" value={country.immigrationDifficulty} showLabel />
           </Box>
         </CardContent>
 
@@ -162,7 +174,7 @@ export const CountryCard = memo(
                 ? t('countries.removeFromCompare')
                 : canAddToCompare
                   ? t('countries.addToCompare')
-                  : 'Максимум 5 стран'
+                  : t('countries.maxCompareReached', { count: 5 })
             }
           >
             <span>
@@ -170,6 +182,13 @@ export const CountryCard = memo(
                 onClick={() => onToggleCompare(country.id)}
                 color={isInCompare ? 'primary' : 'default'}
                 disabled={!isInCompare && !canAddToCompare}
+                aria-label={
+                  isInCompare
+                    ? t('countries.removeFromCompare')
+                    : canAddToCompare
+                      ? t('countries.addToCompare')
+                      : t('countries.maxCompareReached', { count: 5 })
+                }
               >
                 <CompareArrowsIcon />
               </IconButton>

@@ -1,46 +1,16 @@
-export type SafetyLevel = 'low' | 'medium' | 'high';
-export type ImmigrationDifficulty = 'easy' | 'medium' | 'hard';
-export type EnglishLevel = 'low' | 'medium' | 'high';
-export type HealthcareLevel = 'basic' | 'medium' | 'good';
-export type ClimateType =
-  | 'continental'
-  | 'tropical'
-  | 'mediterranean'
-  | 'moderate'
-  | 'diverse'
-  | 'dry';
+// Реэкспорт типов из entities для обратной совместимости
+export type {
+  SafetyLevel,
+  ImmigrationDifficulty,
+  EnglishLevel,
+  HealthcareLevel,
+  ClimateType,
+  BankingLevel,
+  LocalizedName as CountryName,
+  Country,
+} from '@/entities/country/model/types';
 
-export interface CountryName {
-  ru: string;
-  en: string;
-}
-
-export interface Country {
-  id: string;
-  name: CountryName;
-  flag: string;
-  image?: string;
-  population: number;
-  language: string;
-  currency: string;
-  visa: string;
-  costOfLiving: number;
-  safety: SafetyLevel;
-  internetSpeed: number;
-  climate: ClimateType;
-  salary: number;
-  rent: number;
-  groceries: number;
-  immigrationDifficulty: ImmigrationDifficulty;
-  taxes: number;
-  freelanceFriendly: boolean;
-  englishLevel: EnglishLevel;
-  healthcare: HealthcareLevel;
-  transport: number;
-  nomadVisa: boolean;
-  banking: string;
-  russianCommunity: boolean;
-}
+import type { SafetyLevel, ClimateType, EnglishLevel } from '@/entities/country/model/types';
 
 export interface FilterState {
   safety: SafetyLevel[];
@@ -58,3 +28,5 @@ export interface SortState {
   field: SortField;
   direction: SortDirection;
 }
+
+export type CompareMetricValue = number | string | boolean;

@@ -17,6 +17,7 @@ const ruTranslation = {
     compare: 'Сравнение',
     favorites: 'Избранное',
     about: 'О нас',
+    menu: 'Меню',
   },
   countries: {
     title: 'Страны для миграции',
@@ -24,6 +25,7 @@ const ruTranslation = {
     noResults: 'Страны не найдены',
     addToCompare: 'Добавить в сравнение',
     removeFromCompare: 'Удалить из сравнения',
+    maxCompareReached: 'Максимум {{count}} стран',
     addToFavorites: 'В избранное',
     removeFromFavorites: 'Убрать из избранного',
     viewDetails: 'Подробнее',
@@ -41,6 +43,7 @@ const ruTranslation = {
     rent: 'Аренда ($/мес)',
     taxes: 'Налоги (%)',
     reset: 'Сбросить фильтры',
+    activeFilters: 'Активные фильтры',
   },
   sort: {
     title: 'Сортировка',
@@ -75,15 +78,21 @@ const ruTranslation = {
     english: 'Уровень английского',
     immigration: 'Сложность иммиграции',
     mbps: 'Мбит/с',
+    photos: 'Фотографии',
   },
   values: {
     safety: { low: 'Низкая', medium: 'Средняя', high: 'Высокая' },
     immigration: { easy: 'Лёгкая', medium: 'Средняя', hard: 'Сложная' },
     english: { low: 'Низкий', medium: 'Средний', high: 'Высокий' },
-    healthcare: { basic: 'Базовое', medium: 'Среднее', good: 'Хорошее' },
+    healthcare: { basic: 'Базовое', medium: 'Среднее', advanced: 'Продвинутое' },
+    banking: { weak: 'Слабая', medium: 'Средняя', strong: 'Развитая' },
     climate: {
       continental: 'Континентальный',
       tropical: 'Тропический',
+      subtropical: 'Субтропический',
+      oceanic: 'Океанический',
+      arid: 'Аридный',
+      polar: 'Полярный',
       mediterranean: 'Средиземноморский',
       moderate: 'Умеренный',
       diverse: 'Разнообразный',
@@ -100,6 +109,8 @@ const ruTranslation = {
     better: 'Лучше',
     worse: 'Хуже',
     average: 'Среднее',
+    exportPDF: 'Экспорт в PDF',
+    exporting: 'Экспорт...',
   },
   favorites: {
     title: 'Избранные страны',
@@ -110,6 +121,19 @@ const ruTranslation = {
   charts: { costs: 'Расходы', quality: 'Качество жизни' },
   theme: { light: 'Светлая тема', dark: 'Тёмная тема', system: 'Системная' },
   language: { ru: 'Русский', en: 'English' },
+  errors: {
+    countryNotFound: 'Страна не найдена',
+    somethingWentWrong: 'Что-то пошло не так',
+    tryReloadPage: 'Попробуйте перезагрузить страницу',
+    reloadPage: 'Перезагрузить страницу',
+  },
+  toast: {
+    addedToCompare: '{{country}} добавлена в сравнение',
+    removedFromCompare: '{{country}} удалена из сравнения',
+    maxCompareReached: 'Максимум {{count}} стран в сравнении',
+    addedToFavorites: '{{country}} добавлена в избранное',
+    removedFromFavorites: '{{country}} удалена из избранного',
+  },
 };
 
 const enTranslation = {
@@ -123,6 +147,7 @@ const enTranslation = {
     compare: 'Compare',
     favorites: 'Favorites',
     about: 'About',
+    menu: 'Menu',
   },
   countries: {
     title: 'Countries for migration',
@@ -130,6 +155,7 @@ const enTranslation = {
     noResults: 'No countries found',
     addToCompare: 'Add to compare',
     removeFromCompare: 'Remove from compare',
+    maxCompareReached: 'Maximum {{count}} countries',
     addToFavorites: 'Add to favorites',
     removeFromFavorites: 'Remove from favorites',
     viewDetails: 'View details',
@@ -145,6 +171,7 @@ const enTranslation = {
     rent: 'Rent ($/mo)',
     taxes: 'Taxes (%)',
     reset: 'Reset filters',
+    activeFilters: 'Active filters',
   },
   sort: {
     title: 'Sort',
@@ -179,15 +206,21 @@ const enTranslation = {
     english: 'English level',
     immigration: 'Immigration difficulty',
     mbps: 'Mbps',
+    photos: 'Photos',
   },
   values: {
     safety: { low: 'Low', medium: 'Medium', high: 'High' },
     immigration: { easy: 'Easy', medium: 'Medium', hard: 'Hard' },
     english: { low: 'Low', medium: 'Medium', high: 'High' },
-    healthcare: { basic: 'Basic', medium: 'Medium', good: 'Good' },
+    healthcare: { basic: 'Basic', medium: 'Medium', advanced: 'Advanced' },
+    banking: { weak: 'Weak', medium: 'Medium', strong: 'Strong' },
     climate: {
       continental: 'Continental',
       tropical: 'Tropical',
+      subtropical: 'Subtropical',
+      oceanic: 'Oceanic',
+      arid: 'Arid',
+      polar: 'Polar',
       mediterranean: 'Mediterranean',
       moderate: 'Moderate',
       diverse: 'Diverse',
@@ -204,6 +237,8 @@ const enTranslation = {
     better: 'Better',
     worse: 'Worse',
     average: 'Average',
+    exportPDF: 'Export to PDF',
+    exporting: 'Exporting...',
   },
   favorites: {
     title: 'Favorite countries',
@@ -214,6 +249,19 @@ const enTranslation = {
   charts: { costs: 'Costs', quality: 'Quality of life' },
   theme: { light: 'Light theme', dark: 'Dark theme', system: 'System' },
   language: { ru: 'Русский', en: 'English' },
+  errors: {
+    countryNotFound: 'Country not found',
+    somethingWentWrong: 'Something went wrong',
+    tryReloadPage: 'Try reloading the page',
+    reloadPage: 'Reload page',
+  },
+  toast: {
+    addedToCompare: '{{country}} added to compare',
+    removedFromCompare: '{{country}} removed from compare',
+    maxCompareReached: 'Maximum {{count}} countries in compare',
+    addedToFavorites: '{{country}} added to favorites',
+    removedFromFavorites: '{{country}} removed from favorites',
+  },
 };
 
 void i18n

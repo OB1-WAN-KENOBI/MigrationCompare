@@ -1,15 +1,19 @@
-import { STORAGE_KEYS } from '@shared/config';
-
-const MAX_COMPARE_ITEMS = 5;
+import { STORAGE_KEYS, MAX_COMPARE_ITEMS } from '@shared/config';
 
 type Listener = () => void;
 
 const listeners = new Set<Listener>();
 
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string');
+}
+
 const getStoredList = (): string[] => {
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.COMPARE_LIST);
-    return stored ? (JSON.parse(stored) as string[]) : [];
+    if (!stored) return [];
+    const parsed = JSON.parse(stored);
+    return isStringArray(parsed) ? parsed : [];
   } catch {
     return [];
   }

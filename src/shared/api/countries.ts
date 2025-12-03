@@ -1,13 +1,31 @@
-import { api } from './axios';
-import type { Country } from '@shared/types';
-import { API_ENDPOINTS } from '@shared/config';
+import type { Country } from '@/entities/country/model/types';
+import { fetchRestCountries } from './countries/restCountries';
+import { fetchExternalCostOfLiving } from './countries/externalSources';
+import { buildCountry, normalizeCountryId } from '@/entities/country/model/aggregator';
+import { manualCountriesData } from '@shared/config/countries';
 
 export const getCountries = async (): Promise<Country[]> => {
-  const { data } = await api.get<Country[]>(API_ENDPOINTS.COUNTRIES);
-  return data;
+  const [apiCountries, externalCost] = await Promise.all([
+    fetchRestCountries(),
+    fetchExternalCostOfLiving(),
+  ]);
+
+  const externalById = new Map(externalCost.map((e) => [e.id, e]));
+
+  return apiCountries
+    .map((apiCountry) => {
+      const id = normalizeCountryId(apiCountry);
+      const external = externalById.get(id) ?? null;
+      return buildCountry(apiCountry, external);
+    })
+    .filter((c) => manualCountriesData[c.id]); // пока ограничиться списком вручную поддерживаемых стран
 };
 
 export const getCountryById = async (id: string): Promise<Country | undefined> => {
-  const countries = await getCountries();
-  return countries.find((country) => country.id === id);
+  try {
+    const countries = await getCountries();
+    return countries.find((country) => country.id === id);
+  } catch (error) {
+    return undefined;
+  }
 };

@@ -23,5 +23,15 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'dist',
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router'],
+          'mui-vendor': ['@mui/material', '@mui/icons-material'],
+          'query-vendor': ['@tanstack/react-query'],
+          'charts-vendor': ['recharts'],
+        },
+      },
+    },
   },
 }));

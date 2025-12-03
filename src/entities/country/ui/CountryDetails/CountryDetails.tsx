@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -5,6 +6,12 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid2';
 import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import PublicIcon from '@mui/icons-material/Public';
 import PeopleIcon from '@mui/icons-material/People';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -19,7 +26,9 @@ import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+import Skeleton from '@mui/material/Skeleton';
 import { MetricChip } from '@shared/ui';
+import { useCountryPhotos, useNormalizedLanguage, useKeyboardShortcuts } from '@shared/lib';
 import type { Country } from '@shared/types';
 
 interface CountryDetailsProps {
@@ -54,25 +63,49 @@ const MetricRow = ({ icon, label, value }: MetricRowProps) => (
 );
 
 export const CountryDetails = ({ country }: CountryDetailsProps) => {
-  const { t, i18n } = useTranslation();
-  const currentLang = (i18n.language?.startsWith('ru') ? 'ru' : 'en') as 'ru' | 'en';
+  const { t } = useTranslation();
+  const currentLang = useNormalizedLanguage();
+  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
 
-  const formatNumber = (num: number) => {
+  const { data: photos = [], isLoading: photosLoading } = useCountryPhotos(country.name.en, true);
+
+  // Keyboard shortcut для закрытия модалки
+  useKeyboardShortcuts(
+    [
+      {
+        key: 'Escape',
+        handler: () => {
+          if (selectedPhoto) {
+            setSelectedPhoto(null);
+          }
+        },
+      },
+    ],
+    Boolean(selectedPhoto)
+  );
+
+  const formatNumber = (num: number | null) => {
+    if (num === null) return '—';
     return new Intl.NumberFormat(currentLang === 'ru' ? 'ru-RU' : 'en-US').format(num);
   };
 
   return (
     <Box>
-      {/* Header with Image */}
+      {/* Header with Photos */}
       <Paper sx={{ mb: 3, overflow: 'hidden' }}>
-        {country.image && (
+        {/* Main Photo */}
+        {photos.length > 0 && photos[0] && (
           <Box
             sx={{
-              height: 200,
-              backgroundImage: `url(${country.image})`,
+              height: 300,
+              backgroundImage: `url(${photos[0].src.large})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               position: 'relative',
+              cursor: 'pointer',
+              '&:hover': {
+                opacity: 0.9,
+              },
               '&::after': {
                 content: '""',
                 position: 'absolute',
@@ -80,9 +113,10 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
                 left: 0,
                 right: 0,
                 height: '50%',
-                background: 'linear-gradient(transparent, rgba(0,0,0,0.5))',
+                background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
               },
             }}
+            onClick={() => setSelectedPhoto(photos[0]?.src.large2x || null)}
           />
         )}
         <Box sx={{ p: 3 }}>
@@ -100,15 +134,15 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
             </Box>
           </Box>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            <MetricChip type="safety" value={country.safety} />
+            {country.safety !== null && <MetricChip type="safety" value={country.safety} />}
             <MetricChip type="english" value={country.englishLevel} />
             <MetricChip type="immigration" value={country.immigrationDifficulty} />
             <MetricChip type="healthcare" value={country.healthcare} />
             {country.freelanceFriendly && (
-              <Chip label="Freelance Friendly" color="primary" size="small" />
+              <Chip label={t('country.freelanceFriendly')} color="primary" size="small" />
             )}
             {country.nomadVisa && (
-              <Chip label="Digital Nomad Visa" color="secondary" size="small" />
+              <Chip label={t('country.nomadVisa')} color="secondary" size="small" />
             )}
           </Box>
         </Box>
@@ -136,7 +170,7 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               label={t('country.population')}
               value={
                 <Typography variant="body2" fontWeight={600}>
-                  {formatNumber(country.population)}
+                  {country.population !== null ? formatNumber(country.population) : '—'}
                 </Typography>
               }
             />
@@ -154,7 +188,7 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               label={t('country.climate')}
               value={
                 <Typography variant="body2" fontWeight={600}>
-                  {t(`values.climate.${country.climate}`)}
+                  {country.climate !== null ? t(`values.climate.${country.climate}`) : '—'}
                 </Typography>
               }
             />
@@ -182,7 +216,7 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               label={t('country.costOfLiving')}
               value={
                 <Typography variant="body2" fontWeight={600}>
-                  ${country.costOfLiving}/мес
+                  {country.costOfLiving !== null ? `$${country.costOfLiving}/мес` : '—'}
                 </Typography>
               }
             />
@@ -191,7 +225,7 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               label={t('country.rent')}
               value={
                 <Typography variant="body2" fontWeight={600}>
-                  ${country.rent}/мес
+                  {country.rent !== null ? `$${country.rent}/мес` : '—'}
                 </Typography>
               }
             />
@@ -200,7 +234,7 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               label={t('country.groceries')}
               value={
                 <Typography variant="body2" fontWeight={600}>
-                  ${country.groceries}/мес
+                  {country.groceries !== null ? `$${country.groceries}/мес` : '—'}
                 </Typography>
               }
             />
@@ -209,7 +243,7 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               label={t('country.salary')}
               value={
                 <Typography variant="body2" fontWeight={600}>
-                  ${country.salary}/мес
+                  {country.salary !== null ? `$${country.salary}/мес` : '—'}
                 </Typography>
               }
             />
@@ -218,7 +252,7 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               label={t('country.taxes')}
               value={
                 <Typography variant="body2" fontWeight={600}>
-                  {country.taxes}%
+                  {country.taxes !== null ? `${country.taxes}%` : '—'}
                 </Typography>
               }
             />
@@ -232,11 +266,13 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               {t('charts.quality')}
             </Typography>
             <Divider sx={{ mb: 1 }} />
-            <MetricRow
-              icon={<SecurityIcon />}
-              label={t('country.safety')}
-              value={<MetricChip type="safety" value={country.safety} />}
-            />
+            {country.safety !== null && (
+              <MetricRow
+                icon={<SecurityIcon />}
+                label={t('country.safety')}
+                value={<MetricChip type="safety" value={country.safety} />}
+              />
+            )}
             <MetricRow
               icon={<LocalHospitalIcon />}
               label={t('country.healthcare')}
@@ -247,7 +283,9 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               label={t('country.internetSpeed')}
               value={
                 <Typography variant="body2" fontWeight={600}>
-                  {country.internetSpeed} {t('country.mbps')}
+                  {country.internetSpeed !== null
+                    ? `${country.internetSpeed} ${t('country.mbps')}`
+                    : '—'}
                 </Typography>
               }
             />
@@ -256,7 +294,7 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               label={t('country.transport')}
               value={
                 <Typography variant="body2" fontWeight={600}>
-                  ${country.transport}/мес
+                  {country.transport !== null ? `$${country.transport}/мес` : '—'}
                 </Typography>
               }
             />
@@ -280,7 +318,7 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
               label={t('country.banking')}
               value={
                 <Typography variant="body2" fontWeight={600}>
-                  {country.banking}
+                  {t(`values.banking.${country.banking}`)}
                 </Typography>
               }
             />
@@ -310,6 +348,96 @@ export const CountryDetails = ({ country }: CountryDetailsProps) => {
           </Paper>
         </Grid>
       </Grid>
+
+      {/* Photo Gallery */}
+      {(photos.length > 1 || photosLoading) && (
+        <Paper sx={{ mt: 3, p: 2 }}>
+          <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
+            {t('country.photos')}
+          </Typography>
+          {photosLoading ? (
+            <ImageList cols={3} gap={8} sx={{ m: 0 }}>
+              {Array.from({ length: 6 }).map((_, index) => (
+                <ImageListItem key={`skeleton-${index}`}>
+                  <Skeleton
+                    variant="rectangular"
+                    width="100%"
+                    height={200}
+                    sx={{ borderRadius: 1 }}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          ) : photos.length > 1 ? (
+            <ImageList cols={3} gap={8} sx={{ m: 0 }}>
+              {photos.slice(1).map((photo) => (
+                <ImageListItem
+                  key={photo.id}
+                  sx={{
+                    cursor: 'pointer',
+                    overflow: 'hidden',
+                    borderRadius: 1,
+                    '&:hover': {
+                      transform: 'scale(1.02)',
+                      transition: 'transform 0.2s',
+                    },
+                  }}
+                  onClick={() => setSelectedPhoto(photo.src.large2x)}
+                >
+                  <img
+                    src={photo.src.medium}
+                    alt={photo.alt || country.name[currentLang]}
+                    loading="lazy"
+                    style={{
+                      width: '100%',
+                      height: '200px',
+                      objectFit: 'cover',
+                    }}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          ) : null}
+        </Paper>
+      )}
+
+      {/* Photo Dialog */}
+      <Dialog
+        open={Boolean(selectedPhoto)}
+        onClose={() => setSelectedPhoto(null)}
+        maxWidth="lg"
+        fullWidth
+      >
+        <DialogContent sx={{ p: 0, position: 'relative' }}>
+          <IconButton
+            onClick={() => setSelectedPhoto(null)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 1,
+              bgcolor: 'rgba(0,0,0,0.5)',
+              color: 'white',
+              '&:hover': {
+                bgcolor: 'rgba(0,0,0,0.7)',
+              },
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          {selectedPhoto && (
+            <img
+              src={selectedPhoto}
+              alt={country.name[currentLang]}
+              style={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

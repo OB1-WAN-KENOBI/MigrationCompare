@@ -1,15 +1,9 @@
-import { useState, useCallback, useMemo } from 'react';
-import type {
-  Country,
-  FilterState,
-  SortState,
-  SortField,
-  SortDirection,
-  SafetyLevel,
-  ClimateType,
-  EnglishLevel,
-} from '@shared/types';
+import { useState, useCallback, useMemo, useDeferredValue, useTransition, useEffect } from 'react';
+import { useSearchParams } from 'react-router';
+import type { Country, FilterState, SortState, SortField, SortDirection } from '@shared/types';
 import { SAFETY_ORDER, IMMIGRATION_ORDER } from '@shared/config';
+import { useDebounce } from './useDebounce';
+import { serializeFiltersToUrl, parseFiltersFromUrl } from '@shared/lib/utils/urlFilters';
 
 const initialFilters: FilterState = {
   safety: [],
@@ -26,13 +20,40 @@ const initialSort: SortState = {
 };
 
 export const useFilters = (countries: Country[]) => {
-  const [filters, setFilters] = useState<FilterState>(initialFilters);
-  const [sort, setSort] = useState<SortState>(initialSort);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  }, []);
+  // Инициализация из URL или дефолтные значения
+  const urlState = parseFiltersFromUrl(searchParams);
+  const [filters, setFilters] = useState<FilterState>({
+    ...initialFilters,
+    ...urlState.filters,
+  });
+  const [sort, setSort] = useState<SortState>({
+    ...initialSort,
+    ...urlState.sort,
+  });
+  const [searchQuery, setSearchQuery] = useState(urlState.searchQuery);
+  const [isPending, startTransition] = useTransition();
+
+  // Debounce search query для оптимизации
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+  // Deferred value для поиска (React 18 оптимизация)
+  const deferredSearchQuery = useDeferredValue(debouncedSearchQuery);
+
+  // Синхронизация с URL при изменении фильтров
+  useEffect(() => {
+    const params = serializeFiltersToUrl(filters, sort, searchQuery);
+    setSearchParams(params, { replace: true });
+  }, [filters, sort, searchQuery, setSearchParams]);
+
+  const updateFilter = useCallback(
+    <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
+      startTransition(() => {
+        setFilters((prev) => ({ ...prev, [key]: value }));
+      });
+    },
+    [startTransition]
+  );
 
   const resetFilters = useCallback(() => {
     setFilters(initialFilters);
@@ -57,9 +78,9 @@ export const useFilters = (countries: Country[]) => {
   const filteredAndSortedCountries = useMemo(() => {
     let result = [...countries];
 
-    // Search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+    // Search filter (используем deferred значение для плавности)
+    if (deferredSearchQuery) {
+      const query = deferredSearchQuery.toLowerCase();
       result = result.filter(
         (country) =>
           country.name.ru.toLowerCase().includes(query) ||
@@ -69,29 +90,37 @@ export const useFilters = (countries: Country[]) => {
 
     // Safety filter
     if (filters.safety.length > 0) {
-      result = result.filter((country) => filters.safety.includes(country.safety as SafetyLevel));
+      result = result.filter(
+        (country) => country.safety !== null && filters.safety.includes(country.safety)
+      );
     }
 
     // Climate filter
     if (filters.climate.length > 0) {
-      result = result.filter((country) => filters.climate.includes(country.climate as ClimateType));
+      result = result.filter(
+        (country) => country.climate !== null && filters.climate.includes(country.climate)
+      );
     }
 
     // English level filter
     if (filters.englishLevel.length > 0) {
-      result = result.filter((country) =>
-        filters.englishLevel.includes(country.englishLevel as EnglishLevel)
-      );
+      result = result.filter((country) => filters.englishLevel.includes(country.englishLevel));
     }
 
     // Rent range filter
     result = result.filter(
-      (country) => country.rent >= filters.rentRange[0] && country.rent <= filters.rentRange[1]
+      (country) =>
+        country.rent !== null &&
+        country.rent >= filters.rentRange[0] &&
+        country.rent <= filters.rentRange[1]
     );
 
     // Taxes range filter
     result = result.filter(
-      (country) => country.taxes >= filters.taxesRange[0] && country.taxes <= filters.taxesRange[1]
+      (country) =>
+        country.taxes !== null &&
+        country.taxes >= filters.taxesRange[0] &&
+        country.taxes <= filters.taxesRange[1]
     );
 
     // Sorting
@@ -99,18 +128,30 @@ export const useFilters = (countries: Country[]) => {
       let comparison = 0;
 
       switch (sort.field) {
-        case 'rent':
-          comparison = a.rent - b.rent;
+        case 'rent': {
+          const aVal = a.rent ?? Infinity;
+          const bVal = b.rent ?? Infinity;
+          comparison = aVal - bVal;
           break;
-        case 'salary':
-          comparison = a.salary - b.salary;
+        }
+        case 'salary': {
+          const aVal = a.salary ?? Infinity;
+          const bVal = b.salary ?? Infinity;
+          comparison = aVal - bVal;
           break;
-        case 'costOfLiving':
-          comparison = a.costOfLiving - b.costOfLiving;
+        }
+        case 'costOfLiving': {
+          const aVal = a.costOfLiving ?? Infinity;
+          const bVal = b.costOfLiving ?? Infinity;
+          comparison = aVal - bVal;
           break;
-        case 'safety':
-          comparison = (SAFETY_ORDER[a.safety] ?? 0) - (SAFETY_ORDER[b.safety] ?? 0);
+        }
+        case 'safety': {
+          const aVal = a.safety ? (SAFETY_ORDER[a.safety] ?? 0) : -1;
+          const bVal = b.safety ? (SAFETY_ORDER[b.safety] ?? 0) : -1;
+          comparison = aVal - bVal;
           break;
+        }
         case 'immigrationDifficulty':
           comparison =
             (IMMIGRATION_ORDER[a.immigrationDifficulty] ?? 0) -
@@ -124,7 +165,7 @@ export const useFilters = (countries: Country[]) => {
     });
 
     return result;
-  }, [countries, filters, sort, searchQuery]);
+  }, [countries, filters, sort, deferredSearchQuery]);
 
   return {
     filters,
@@ -136,5 +177,6 @@ export const useFilters = (countries: Country[]) => {
     setSortField,
     setSortDirection,
     filteredAndSortedCountries,
+    isPending, // Для показа индикатора загрузки при необходимости
   };
 };

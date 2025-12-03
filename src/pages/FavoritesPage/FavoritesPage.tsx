@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { CountryCard } from '@entities/CountryCard';
+import { CountryCard } from '@entities/country/ui';
 import { useCountries, useFavorites, useCompare } from '@shared/lib';
 import { CountrySkeleton, PageTransition } from '@shared/ui';
 

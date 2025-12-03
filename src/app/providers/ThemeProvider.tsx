@@ -32,6 +32,11 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     if (stored === 'light' || stored === 'dark') {
       return stored;
     }
+    // Определяем системную тему
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return prefersDark ? 'dark' : 'light';
+    }
     return 'dark';
   });
 

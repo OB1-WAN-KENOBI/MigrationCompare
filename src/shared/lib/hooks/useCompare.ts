@@ -1,5 +1,6 @@
 import { useSyncExternalStore, useCallback } from 'react';
-import { compareStore } from '../stores/compareStore';
+import { compareStore } from '@shared/lib/stores/compareStore';
+import { MAX_COMPARE_ITEMS } from '@shared/config';
 
 export const useCompare = () => {
   const compareList = useSyncExternalStore(
@@ -38,7 +39,7 @@ export const useCompare = () => {
     isInCompare,
     toggleCompare,
     clearCompare,
-    canAddMore: compareList.length < 5,
+    canAddMore: compareList.length < MAX_COMPARE_ITEMS,
     compareCount: compareList.length,
   };
 };

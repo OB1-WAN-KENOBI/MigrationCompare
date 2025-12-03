@@ -10,30 +10,36 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Slider from '@mui/material/Slider';
 import Button from '@mui/material/Button';
+import Badge from '@mui/material/Badge';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import type { FilterState, SafetyLevel, ClimateType, EnglishLevel } from '@shared/types';
+import { ActiveFiltersChips } from './ActiveFiltersChips';
+import { countActiveFilters } from '@shared/lib/utils/filterHelpers';
 
 interface CountryFilterPanelProps {
   filters: FilterState;
+  searchQuery: string;
   onFilterChange: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void;
   onReset: () => void;
+  onSearchChange: (value: string) => void;
 }
 
 const safetyOptions: SafetyLevel[] = ['low', 'medium', 'high'];
 const climateOptions: ClimateType[] = [
   'continental',
   'tropical',
-  'mediterranean',
-  'moderate',
-  'diverse',
-  'dry',
+  'subtropical',
+  'oceanic',
+  'arid',
+  'polar',
 ];
 const englishOptions: EnglishLevel[] = ['low', 'medium', 'high'];
 
 export const CountryFilterPanel = memo(
-  ({ filters, onFilterChange, onReset }: CountryFilterPanelProps) => {
+  ({ filters, searchQuery, onFilterChange, onReset, onSearchChange }: CountryFilterPanelProps) => {
     const { t } = useTranslation();
+    const activeCount = countActiveFilters(filters, searchQuery);
 
     const handleCheckboxChange = <K extends keyof FilterState>(
       key: K,
@@ -50,13 +56,23 @@ export const CountryFilterPanel = memo(
     return (
       <Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h6" fontWeight={600}>
-            {t('filters.title')}
-          </Typography>
+          <Badge badgeContent={activeCount} color="primary">
+            <Typography variant="h6" fontWeight={600}>
+              {t('filters.title')}
+            </Typography>
+          </Badge>
           <Button size="small" startIcon={<FilterAltOffIcon />} onClick={onReset} color="inherit">
             {t('filters.reset')}
           </Button>
         </Box>
+
+        {/* Active Filters Chips */}
+        <ActiveFiltersChips
+          filters={filters}
+          searchQuery={searchQuery}
+          onRemoveFilter={onFilterChange}
+          onSearchChange={onSearchChange}
+        />
 
         {/* Safety Filter */}
         <Accordion defaultExpanded disableGutters elevation={0} sx={{ bgcolor: 'transparent' }}>

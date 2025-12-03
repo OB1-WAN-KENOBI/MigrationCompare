@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -11,39 +11,42 @@ interface SearchCountriesProps {
   onChange: (value: string) => void;
 }
 
-export const SearchCountries = memo(({ value, onChange }: SearchCountriesProps) => {
-  const { t } = useTranslation();
+export const SearchCountries = memo(
+  forwardRef<HTMLInputElement, SearchCountriesProps>(({ value, onChange }, ref) => {
+    const { t } = useTranslation();
 
-  return (
-    <TextField
-      fullWidth
-      size="small"
-      placeholder={t('countries.search')}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      slotProps={{
-        input: {
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon color="action" />
-            </InputAdornment>
-          ),
-          endAdornment: value && (
-            <InputAdornment position="end">
-              <IconButton size="small" onClick={() => onChange('')}>
-                <ClearIcon fontSize="small" />
-              </IconButton>
-            </InputAdornment>
-          ),
-        },
-      }}
-      sx={{
-        '& .MuiOutlinedInput-root': {
-          borderRadius: 2,
-        },
-      }}
-    />
-  );
-});
+    return (
+      <TextField
+        fullWidth
+        size="small"
+        placeholder={t('countries.search')}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        inputRef={ref}
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon color="action" />
+              </InputAdornment>
+            ),
+            endAdornment: value && (
+              <InputAdornment position="end">
+                <IconButton size="small" onClick={() => onChange('')}>
+                  <ClearIcon fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
+        }}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            borderRadius: 2,
+          },
+        }}
+      />
+    );
+  })
+);
 
 SearchCountries.displayName = 'SearchCountries';

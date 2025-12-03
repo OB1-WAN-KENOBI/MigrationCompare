@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
+import { getColorClass } from '@shared/lib/utils/compare';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -15,11 +16,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import { useCountries, useCompare } from '@shared/lib';
+import { MetaTags } from '@dr.pogodin/react-helmet';
+import { useState } from 'react';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { useCountries, useCompare, useNormalizedLanguage } from '@shared/lib';
 import { PageTransition } from '@shared/ui';
-import type { Country } from '@shared/types';
-
-type CompareMetricValue = number | string | boolean;
+import type { Country, CompareMetricValue } from '@shared/types';
 
 interface CompareRow {
   id: string;
@@ -27,56 +29,6 @@ interface CompareRow {
   metricKey: string;
   [countryId: string]: CompareMetricValue;
 }
-
-const getColorClass = (
-  value: CompareMetricValue,
-  allValues: CompareMetricValue[],
-  _metricKey: string,
-  higherIsBetter: boolean
-): 'success' | 'error' | 'default' => {
-  if (typeof value === 'boolean') {
-    return value ? 'success' : 'error';
-  }
-
-  if (typeof value === 'string') {
-    const levelMap: Record<string, number> = {
-      high: 3,
-      good: 3,
-      medium: 2,
-      easy: 3,
-      low: 1,
-      basic: 1,
-      hard: 1,
-    };
-    const numericValues = allValues.map((v) => levelMap[v as string] ?? 2);
-    const numericValue = levelMap[value] ?? 2;
-    const max = Math.max(...numericValues);
-    const min = Math.min(...numericValues);
-
-    if (numericValue === max && max !== min) {
-      return higherIsBetter ? 'success' : 'error';
-    }
-    if (numericValue === min && max !== min) {
-      return higherIsBetter ? 'error' : 'success';
-    }
-    return 'default';
-  }
-
-  if (typeof value === 'number') {
-    const numericValues = allValues.filter((v): v is number => typeof v === 'number');
-    const max = Math.max(...numericValues);
-    const min = Math.min(...numericValues);
-
-    if (value === max && max !== min) {
-      return higherIsBetter ? 'success' : 'error';
-    }
-    if (value === min && max !== min) {
-      return higherIsBetter ? 'error' : 'success';
-    }
-  }
-
-  return 'default';
-};
 
 const metrics: {
   key: keyof Country;
@@ -124,9 +76,10 @@ const metrics: {
 ];
 
 const ComparePage = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const currentLang = (i18n.language?.startsWith('ru') ? 'ru' : 'en') as 'ru' | 'en';
+  const currentLang = useNormalizedLanguage();
+  const [isExporting, setIsExporting] = useState(false);
 
   const { data: allCountries = [], isLoading } = useCountries();
   const { compareList, removeFromCompare, clearCompare } = useCompare();
@@ -201,10 +154,12 @@ const ComparePage = () => {
           const allValues = countries.map(
             (c) => c[metricKey as keyof Country] as CompareMetricValue
           );
-          const color = getColorClass(value, allValues, metricKey, metricInfo.higherIsBetter);
+          const color = getColorClass(value, allValues, metricInfo.higherIsBetter);
 
           let displayValue: string;
-          if (typeof value === 'boolean') {
+          if (value === null || value === undefined) {
+            displayValue = '—';
+          } else if (typeof value === 'boolean') {
             displayValue = value ? t('values.yes') : t('values.no');
           } else if (typeof value === 'string') {
             const translationMap: Record<string, string> = {
@@ -212,6 +167,7 @@ const ComparePage = () => {
               englishLevel: 'values.english',
               healthcare: 'values.healthcare',
               immigrationDifficulty: 'values.immigration',
+              banking: 'values.banking',
             };
             const translationKey = translationMap[metricKey];
             displayValue = translationKey ? t(`${translationKey}.${value}`) : String(value);
@@ -243,115 +199,147 @@ const ComparePage = () => {
   }
 
   return (
-    <PageTransition>
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-        {/* Header */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Box>
-            <Button startIcon={<ArrowBackIcon />} onClick={() => void navigate('/')}>
-              {t('nav.home')}
-            </Button>
-          </Box>
-          <Typography variant="h4" component="h1" fontWeight={700}>
-            {t('compare.title')}
-          </Typography>
-          <Box>
-            {countries.length > 0 && (
-              <Button
-                startIcon={<ClearAllIcon />}
-                onClick={clearCompare}
-                color="error"
-                variant="outlined"
-              >
-                Очистить
-              </Button>
-            )}
-          </Box>
-        </Box>
-
-        {/* Empty State */}
-        {countries.length === 0 && (
-          <Paper
-            sx={{
-              p: 8,
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 2,
-            }}
+    <>
+      <MetaTags title={t('compare.title')} description={t('compare.emptyHint')} />
+      <PageTransition>
+        <Container maxWidth="xl" sx={{ py: 4 }}>
+          {/* Header */}
+          <Box
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}
           >
-            <CompareArrowsIcon sx={{ fontSize: 64, color: 'text.secondary' }} />
-            <Typography variant="h5" color="text.secondary">
-              {t('compare.empty')}
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              {t('compare.emptyHint')}
-            </Typography>
-            <Button variant="contained" onClick={() => void navigate('/')} sx={{ mt: 2 }}>
-              {t('nav.home')}
-            </Button>
-          </Paper>
-        )}
-
-        {/* Comparison Table */}
-        {countries.length > 0 && (
-          <>
-            {/* Legend */}
-            <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Chip label={t('compare.better')} color="success" size="small" />
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Chip label={t('compare.worse')} color="error" size="small" />
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Chip label={t('compare.average')} color="default" size="small" />
-              </Box>
+            <Box>
+              <Button startIcon={<ArrowBackIcon />} onClick={() => void navigate('/')}>
+                {t('nav.home')}
+              </Button>
             </Box>
+            <Typography variant="h4" component="h1" fontWeight={700}>
+              {t('compare.title')}
+            </Typography>
+            <Box>
+              {countries.length > 0 && (
+                <Button
+                  startIcon={<ClearAllIcon />}
+                  onClick={clearCompare}
+                  color="error"
+                  variant="outlined"
+                >
+                  Очистить
+                </Button>
+              )}
+            </Box>
+          </Box>
 
-            <Paper sx={{ width: '100%', overflow: 'auto' }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                disableRowSelectionOnClick
-                disableColumnMenu
-                hideFooter
-                autoHeight
-                sx={{
-                  '& .MuiDataGrid-cell': {
-                    display: 'flex',
-                    alignItems: 'center',
-                  },
-                  '& .MuiDataGrid-columnHeader': {
-                    backgroundColor: 'background.paper',
-                  },
-                  '& .MuiDataGrid-row:nth-of-type(odd)': {
-                    backgroundColor: 'action.hover',
-                  },
-                  '& .MuiDataGrid-cell:first-of-type': {
-                    position: 'sticky',
-                    left: 0,
-                    zIndex: 1,
-                    backgroundColor: 'background.paper',
-                    borderRight: 1,
-                    borderColor: 'divider',
-                  },
-                  '& .MuiDataGrid-columnHeader:first-of-type': {
-                    position: 'sticky',
-                    left: 0,
-                    zIndex: 2,
-                    backgroundColor: 'background.paper',
-                    borderRight: 1,
-                    borderColor: 'divider',
-                  },
-                }}
-              />
+          {/* Empty State */}
+          {countries.length === 0 && (
+            <Paper
+              sx={{
+                p: 8,
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 2,
+              }}
+            >
+              <CompareArrowsIcon sx={{ fontSize: 64, color: 'text.secondary' }} />
+              <Typography variant="h5" color="text.secondary">
+                {t('compare.empty')}
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                {t('compare.emptyHint')}
+              </Typography>
+              <Button variant="contained" onClick={() => void navigate('/')} sx={{ mt: 2 }}>
+                {t('nav.home')}
+              </Button>
             </Paper>
-          </>
-        )}
-      </Container>
-    </PageTransition>
+          )}
+
+          {/* Comparison Table */}
+          {countries.length > 0 && (
+            <>
+              {/* Export Button */}
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<FileDownloadIcon />}
+                  disabled={isExporting}
+                  onClick={async () => {
+                    setIsExporting(true);
+                    try {
+                      const { exportToPDF } = await import('@shared/lib/utils/exportPDF');
+                      const exportMetrics = metrics.map((m) => ({
+                        key: m.key,
+                        label: t(m.labelKey),
+                        format: m.format,
+                      }));
+                      await exportToPDF(countries, exportMetrics, currentLang);
+                    } catch (error) {
+                      console.error('Failed to export PDF:', error);
+                    } finally {
+                      setIsExporting(false);
+                    }
+                  }}
+                  aria-label={t('compare.exportPDF')}
+                >
+                  {isExporting ? t('compare.exporting') : t('compare.exportPDF')}
+                </Button>
+              </Box>
+              {/* Legend */}
+              <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Chip label={t('compare.better')} color="success" size="small" />
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Chip label={t('compare.worse')} color="error" size="small" />
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Chip label={t('compare.average')} color="default" size="small" />
+                </Box>
+              </Box>
+
+              <Paper sx={{ width: '100%', overflow: 'auto' }}>
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  disableRowSelectionOnClick
+                  disableColumnMenu
+                  hideFooter
+                  autoHeight
+                  sx={{
+                    '& .MuiDataGrid-cell': {
+                      display: 'flex',
+                      alignItems: 'center',
+                    },
+                    '& .MuiDataGrid-columnHeader': {
+                      backgroundColor: 'background.paper',
+                    },
+                    '& .MuiDataGrid-row:nth-of-type(odd)': {
+                      backgroundColor: 'action.hover',
+                    },
+                    '& .MuiDataGrid-cell:first-of-type': {
+                      position: 'sticky',
+                      left: 0,
+                      zIndex: 1,
+                      backgroundColor: 'background.paper',
+                      borderRight: 1,
+                      borderColor: 'divider',
+                    },
+                    '& .MuiDataGrid-columnHeader:first-of-type': {
+                      position: 'sticky',
+                      left: 0,
+                      zIndex: 2,
+                      backgroundColor: 'background.paper',
+                      borderRight: 1,
+                      borderColor: 'divider',
+                    },
+                  }}
+                />
+              </Paper>
+            </>
+          )}
+        </Container>
+      </PageTransition>
+    </>
   );
 };
 

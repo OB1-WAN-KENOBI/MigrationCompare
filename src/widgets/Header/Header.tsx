@@ -31,7 +31,7 @@ import Badge from '@mui/material/Badge';
 import Tooltip from '@mui/material/Tooltip';
 import { useThemeMode } from '@app/providers';
 import { CompareList } from '@features/CompareList';
-import { useCompare, useFavorites } from '@shared/lib';
+import { useCompare, useFavorites, useNormalizedLanguage } from '@shared/lib';
 import { STORAGE_KEYS } from '@shared/config';
 
 const navItems = [
@@ -48,6 +48,7 @@ export const Header = () => {
   const { mode, toggleTheme } = useThemeMode();
   const { compareCount } = useCompare();
   const { favorites } = useFavorites();
+  const currentLang = useNormalizedLanguage();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langAnchorEl, setLangAnchorEl] = useState<null | HTMLElement>(null);
@@ -141,19 +142,14 @@ export const Header = () => {
 
         {/* Language */}
         <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => handleLanguageChange(i18n.language === 'ru' ? 'en' : 'ru')}
-          >
+          <ListItemButton onClick={() => handleLanguageChange(currentLang === 'ru' ? 'en' : 'ru')}>
             <ListItemIcon>
               <LanguageIcon />
             </ListItemIcon>
-            <ListItemText
-              primary={t('language.ru')}
-              secondary={i18n.language === 'ru' ? '✓' : ''}
-            />
+            <ListItemText primary={t('language.ru')} secondary={currentLang === 'ru' ? '✓' : ''} />
             <ListItemText
               primary={t('language.en')}
-              secondary={i18n.language === 'en' ? '✓' : ''}
+              secondary={currentLang === 'en' ? '✓' : ''}
               sx={{ textAlign: 'right' }}
             />
           </ListItemButton>
@@ -176,7 +172,13 @@ export const Header = () => {
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           {isMobile && (
-            <IconButton color="inherit" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+              aria-label={t('nav.menu')}
+            >
               <MenuIcon />
             </IconButton>
           )}
@@ -233,6 +235,7 @@ export const Header = () => {
                 onClick={() => void navigate('/favorites')}
                 sx={{ color: location.pathname === '/favorites' ? 'error.main' : 'text.secondary' }}
                 size={isMobile ? 'small' : 'medium'}
+                aria-label={t('nav.favorites')}
               >
                 <Badge badgeContent={favorites.length} color="error">
                   <FavoriteIcon fontSize={isMobile ? 'small' : 'medium'} />
@@ -242,7 +245,11 @@ export const Header = () => {
 
             {/* Language - desktop only */}
             <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-              <IconButton onClick={handleLangMenuOpen} sx={{ color: 'text.secondary' }}>
+              <IconButton
+                onClick={handleLangMenuOpen}
+                sx={{ color: 'text.secondary' }}
+                aria-label={t('language.change')}
+              >
                 <LanguageIcon />
               </IconButton>
               <Menu
@@ -252,13 +259,13 @@ export const Header = () => {
               >
                 <MenuItem
                   onClick={() => handleLanguageChange('ru')}
-                  selected={i18n.language === 'ru'}
+                  selected={currentLang === 'ru'}
                 >
                   {t('language.ru')}
                 </MenuItem>
                 <MenuItem
                   onClick={() => handleLanguageChange('en')}
-                  selected={i18n.language === 'en'}
+                  selected={currentLang === 'en'}
                 >
                   {t('language.en')}
                 </MenuItem>
@@ -269,6 +276,7 @@ export const Header = () => {
             <IconButton
               onClick={toggleTheme}
               sx={{ color: 'text.secondary', display: { xs: 'none', md: 'flex' } }}
+              aria-label={t(`theme.${mode === 'dark' ? 'light' : 'dark'}`)}
             >
               {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>

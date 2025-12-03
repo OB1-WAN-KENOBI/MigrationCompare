@@ -16,10 +16,6 @@ export const ROUTES = {
   COMPARE: '/compare',
 } as const;
 
-export const API_ENDPOINTS = {
-  COUNTRIES: '/countries.json',
-} as const;
-
 export const SAFETY_ORDER: Record<string, number> = {
   low: 1,
   medium: 2,
@@ -37,3 +33,5 @@ export const ENGLISH_ORDER: Record<string, number> = {
   medium: 2,
   high: 3,
 };
+
+export const MAX_COMPARE_ITEMS = 5;
